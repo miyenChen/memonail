@@ -6,30 +6,33 @@ import Icon from '../ui/Icon';
 import Button from '../ui/Button';
 import Header from '../ui/Header';
 
-const StyledIntro = styled.div`
+const Nav = styled.nav`
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
     & a {
         font-size: 1rem;
         font-weight: 700;
         padding: 0.25rem;
-        font-weight: 700;
-        padding: 0.25rem;
 
+        &:not(:last-child):hover {
+            box-shadow: 0px -2px 0px 0px var(--color-cyan-500) inset;
+        }
         &:visited {
             color: var(--color-gray-500);
         }
     }
 `;
-const Nav = styled.nav`
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-`;
 const Main = styled.main`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 70%;
+    width: 90%;
     margin: auto;
+    @media screen and (min-width: 768px) {
+        width: 70%;
+    }
 `;
 const Hero = styled.div`
     display: flex;
@@ -56,28 +59,29 @@ const HeroButton = styled(Button)`
     }
 `;
 const IntroCards = styled.div`
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     width: 100%;
     gap: 0.5rem;
 
     @media screen and (min-width: 768px) {
-        flex-direction: row;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media screen and (min-width: 1280px) {
+        grid-template-columns: repeat(3, 1fr);
     }
 `;
 const IntroCardItem = styled.div`
     display: flex;
-    flex-grow: 1;
     justify-content: center;
     border: 2px solid var(--color-cyan-500);
     border-radius: 0.5rem;
     padding: 1rem;
     height: 300px;
-    width: 100%;
 `;
 function Intro() {
     return (
-        <StyledIntro>
+        <>
             <Header>
                 <Nav>
                     <Link to="register">註冊</Link>
@@ -115,7 +119,7 @@ function Intro() {
                     </IntroCardItem>
                 </IntroCards>
             </Main>
-        </StyledIntro>
+        </>
     );
 }
 export default Intro;
