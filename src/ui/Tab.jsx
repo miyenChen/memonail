@@ -1,38 +1,23 @@
-import styled, { css } from 'styled-components';
-
-const size = {
-    sm: css`
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-    `,
-    md: css`
-        font-size: 1.2rem;
-        padding: 0.25rem 0.5rem;
-    `,
-    lg: css`
-        font-size: 1.4rem;
-        padding: 0.25rem 0.5rem;
-    `,
-};
+import styled from 'styled-components';
 
 const Tab = styled.button`
-    background-color: var(--color-bg);
-    color: var(--color-gray-400);
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-500);
     border: none;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     text-align: center;
     font-weight: 700;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
 
     &:hover {
-        background-color: var(--color-gray-200);
+        cursor: pointer;
     }
     &.active {
-        color: var(--color-cyan-500);
+        background-color: var(--color-gray-0);
+        color: var(--color-cyan-900);
+        box-shadow: var(--box-shadow);
     }
-
-    ${(props) => size[props.size]}
 `;
-Tab.defaultProps = {
-    size: 'md',
-};
+
 export default Tab;

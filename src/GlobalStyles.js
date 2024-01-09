@@ -6,6 +6,7 @@ const GlobalStyle = createGlobalStyle`
     --color-bg: #f3f4f6;
     --color-cyan-500: #06b6d4;
     --color-cyan-600: #0891b2;
+    --color-amber-300: #fcd34d;
     --color-amber-400: #fbbf24;
     --color-amber-500: #f59e0b;
 
@@ -22,6 +23,7 @@ const GlobalStyle = createGlobalStyle`
     --color-gray-800: #1f2937;
     --color-gray-900: #111827;
 
+    --box-shadow: 0 0 8px var(--color-gray-300);
 }
 *,
 *::before,
@@ -39,6 +41,10 @@ body {
 }
 h1,h2,h3{
     color: var(--color-gray-900);
+},
+a,a:visited{
+    text-decoration: none;
 }
+
 `;
 export default GlobalStyle;
