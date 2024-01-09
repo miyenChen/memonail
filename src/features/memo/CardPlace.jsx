@@ -9,7 +9,7 @@ const Place = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 1px solid var(--color-gray-200);
+    border-top: var(--divider);
     padding-top: 0.25rem;
 
     & div {

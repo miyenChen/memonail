@@ -23,7 +23,12 @@ const GlobalStyle = createGlobalStyle`
     --color-gray-800: #1f2937;
     --color-gray-900: #111827;
 
-    --box-shadow: 0 0 8px var(--color-gray-300);
+    /* shadow */
+    --color-shadow:var(--color-gray-300);
+    --box-shadow: 0 0 8px var(--color-shadow);
+
+    --divider:1px solid var(--color-gray-200);
+
 }
 *,
 *::before,

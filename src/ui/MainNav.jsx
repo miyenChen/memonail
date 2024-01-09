@@ -1,59 +1,134 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiHome, FiBell, FiBriefcase, FiSettings } from 'react-icons/fi';
+import LogoGroup from './LogoGroup';
 
 const StyledMainNav = styled.nav`
-    height: 3rem;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-color: #8ffee4;
+    height: 3rem;
 
     & span {
+        display: none;
+    }
+    /* Hide the logo when screen width is below 768 */
+    & div:first-child {
         display: none;
     }
 
     @media screen and (min-width: 768px) {
         flex-direction: column;
+        justify-content: start;
+        padding: 1rem 0.5rem 0 0.5rem;
         height: 100%;
         width: 4rem;
+
+        & div:first-child {
+            display: flex;
+            margin: 0.5rem 0 1rem;
+            gap: 0.25rem;
+
+            /* Only display logo */
+            & img:last-child {
+                display: none;
+            }
+        }
     }
     @media screen and (min-width: 1280px) {
-        height: 100%;
         width: 15rem;
+        padding: 1rem;
+        & span {
+            display: inline-block;
+            flex: 1 0 0;
+            margin-left: 0.5rem;
+        }
+        & div:first-child {
+            & img:last-child {
+                display: block;
+            }
+        }
     }
 `;
-const Icon = styled.div`
-    padding: 0.25rem;
+
+const Nav = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    border-top: var(--divider);
+    width: 100%;
+
+    @media screen and (min-width: 768px) {
+        flex: 1 0 0;
+        flex-direction: column;
+        justify-content: start;
+        align-self: stretch;
+        border: none;
+    }
+`;
+const StyledNavLink = styled(NavLink)`
+    & svg {
+        width: 1.25rem;
+        height: 2.4rem;
+        color: var(--color-gray-400);
+        transition: all 0.3s;
+    }
+    &:link,
+    &:visited {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-gray-400);
+        font-weight: 700;
+        border-radius: 0.25rem;
+        padding: 0 0.5rem;
+        margin: 0.25rem 0;
+        transition: all 0.3s;
+    }
+    &:hover {
+        background-color: var(--color-gray-100);
+    }
+    &:active,
+    &.active:link,
+    &.active:visited,
+    &:active svg,
+    &.active:link svg,
+    &.active:visited svg {
+        color: var(--color-cyan-500);
+    }
+
+    @media screen and (min-width: 768px) {
+        justify-content: start;
+        align-self: stretch;
+    }
 `;
 function MainNav() {
     return (
         <StyledMainNav>
-            <NavLink to="home">
-                <Icon>
+            <LogoGroup />
+
+            <Nav>
+                <StyledNavLink to="home">
                     <FiHome />
-                </Icon>
-                <span>首頁</span>
-            </NavLink>
-            <NavLink to="itinerary">
-                <Icon>
+                    <span>首頁</span>
+                </StyledNavLink>
+
+                <StyledNavLink to="itinerary">
                     <FiBriefcase />
-                </Icon>
-                <span>行程</span>
-            </NavLink>
-            <NavLink to="notification">
-                <Icon>
+
+                    <span>行程</span>
+                </StyledNavLink>
+
+                <StyledNavLink to="notification">
                     <FiBell />
-                </Icon>
-                <span>通知</span>
-            </NavLink>
-            <NavLink to="setting">
-                <Icon>
+
+                    <span>通知</span>
+                </StyledNavLink>
+                <StyledNavLink to="setting">
                     <FiSettings />
-                </Icon>
-                <span>設定</span>
-            </NavLink>
+
+                    <span>設定</span>
+                </StyledNavLink>
+            </Nav>
         </StyledMainNav>
     );
 }
