@@ -3,8 +3,8 @@ import { FiArrowRight } from 'react-icons/fi';
 import styled from 'styled-components';
 import intro from '../assets/team.png';
 import Icon from '../ui/Icon';
-import LogoGroup from '../ui/LogoGroup';
 import Button from '../ui/Button';
+import Header from '../ui/Header';
 
 const StyledIntro = styled.div`
     & a {
@@ -19,18 +19,10 @@ const StyledIntro = styled.div`
         }
     }
 `;
-const Header = styled.header`
-    height: 3rem;
+const Nav = styled.nav`
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 1.5rem;
-
-    & nav {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
+    gap: 0.75rem;
 `;
 const Main = styled.main`
     display: flex;
@@ -87,13 +79,12 @@ function Intro() {
     return (
         <StyledIntro>
             <Header>
-                <LogoGroup />
-                <nav>
+                <Nav>
                     <Link to="register">註冊</Link>
                     <Link to="login">
                         <Button>登入帳號</Button>
                     </Link>
-                </nav>
+                </Nav>
             </Header>
             <Main>
                 <Hero>

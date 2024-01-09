@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import logoText from '/logo-text.svg';
 import logo from '/logo-icon.svg';
 
-const StyledLogoGroup = styled.div`
+const StyledLogoGroup = styled.a`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10,7 +10,7 @@ const StyledLogoGroup = styled.div`
 `;
 function LogoGroup() {
     return (
-        <StyledLogoGroup>
+        <StyledLogoGroup href="/">
             <img src={logo} alt="logo" />
             <img src={logoText} alt="logo" />
         </StyledLogoGroup>
