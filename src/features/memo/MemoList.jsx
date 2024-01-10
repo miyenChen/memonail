@@ -1,29 +1,14 @@
 import styled from 'styled-components';
 import MemoListCard from './MemoListCard';
-
-const StyledMemoList = styled.ul`
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-`;
+import CardList from '../../ui/CardList';
+import AddCard from '../../ui/AddCard';
 
 function MemoList() {
     return (
-        <StyledMemoList>
+        <CardList $col={3}>
+            <AddCard />
             <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-            <MemoListCard />
-        </StyledMemoList>
+        </CardList>
     );
 }
 export default MemoList;

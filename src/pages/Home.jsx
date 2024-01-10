@@ -17,7 +17,6 @@ const TagListPadding = styled.div`
     padding: 0.5rem;
     margin: 0.75rem 0;
 `;
-const AddButton = styled.button``;
 function Home() {
     return (
         <>

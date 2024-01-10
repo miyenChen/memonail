@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Tab = styled.button`
     background-color: var(--color-gray-200);
-    color: var(--color-gray-500);
+    color: var(--color-gray-400);
     border: none;
     border-radius: 0.5rem;
     text-align: center;
@@ -15,7 +15,7 @@ const Tab = styled.button`
     }
     &.active {
         background-color: var(--color-gray-0);
-        color: var(--color-cyan-900);
+        color: var(--color-cyan-500);
         box-shadow: var(--box-shadow);
     }
 `;

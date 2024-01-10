@@ -44,9 +44,9 @@ body {
     font-size: 1rem;
     color:var(--color-gray-500)
 }
-h1,h2,h3{
+h1,h2,h3,h4{
     color: var(--color-gray-900);
-},
+}
 a,a:visited{
     text-decoration: none;
 }
