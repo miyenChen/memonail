@@ -1,5 +1,10 @@
 import styled, { css } from 'styled-components';
+
 const size = {
+    'small': css`
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    `,
     'normal': css`
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
@@ -23,6 +28,11 @@ const Button = styled.button`
     cursor: pointer;
 
     ${(props) => size[props.size]}
+    ${(props) => (props.$w100 ? 'width: 100%;' : '')}
+
+    &:hover {
+        background-color: var(--color-cyan-600);
+    }
 `;
 Button.defaultProps = {
     size: 'normal',
