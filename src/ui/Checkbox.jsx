@@ -3,16 +3,11 @@ import styled from 'styled-components';
 const StyledCheckbox = styled.div`
     display: flex;
     align-items: center;
+    margin: 0.5rem 0;
     gap: 0.25rem;
 
     & label {
         font-size: 0.75rem;
-    }
-    & input {
-        height: 1rem;
-        width: 1rem;
-        transform-origin: 0;
-        accent-color: var(--color-gray-600);
     }
 `;
 function Checkbox({ checked, onChange, disabled = false, id, children }) {

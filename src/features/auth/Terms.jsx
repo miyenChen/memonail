@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 function Terms() {
     const [content, setContent] = useState('');
 
+    // markdown檔案位置
     const md = '/terms.md';
     useEffect(() => {
         fetch(md)

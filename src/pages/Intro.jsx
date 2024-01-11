@@ -84,8 +84,8 @@ function Intro() {
         <>
             <Header>
                 <Nav>
-                    <Link to="register">註冊</Link>
-                    <Link to="login">
+                    <Link to="user/register">註冊</Link>
+                    <Link to="user/login">
                         <Button>登入帳號</Button>
                     </Link>
                 </Nav>

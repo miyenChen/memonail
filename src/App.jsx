@@ -10,6 +10,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Profile from './features/setting/Profile';
 import Account from './features/setting/Account';
+import AuthLayout from './pages/AuthLayout';
 
 function App() {
     return (
@@ -18,8 +19,11 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route index element={<Intro />} />
-                    <Route path="register" element={<Register />} />
-                    <Route path="login" element={<Login />} />
+                    <Route path="user" element={<AuthLayout />}>
+                        <Route index element={<Navigate to="/" replace />} />
+                        <Route path="register" element={<Register />} />
+                        <Route path="login" element={<Login />} />
+                    </Route>
                     <Route path="/" element={<Layout />}>
                         <Route path="home" element={<Home />} />
                         <Route path="itinerary" element={<Itinerary />} />
