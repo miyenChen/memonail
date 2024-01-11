@@ -9,10 +9,11 @@ const IconButton = styled.button`
     border: none;
     border-radius: 10rem;
     box-shadow: ${(props) => (props.$shadow ? 'var(--box-shadow)' : undefined)};
-    background-color: var(--color-gray-0);
+    background-color: ${(props) => (props.$bg ? props.$bg : undefined)};
 
     &:hover {
         background-color: var(--color-gray-100);
+        cursor: pointer;
     }
     & svg {
         width: 1.25rem;
