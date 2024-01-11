@@ -1,9 +1,22 @@
 import styled from 'styled-components';
 
-const Input = styled.input`
-    background-color: var(--color-gray-100);
-    border: none;
+const Input = styled.input.attrs((props) => ({ type: 'text' }))`
+    border: 1px solid var(--color-gray-400);
     border-radius: 0.25rem;
     padding: 0.5rem;
+
+    ${(props) => (props.$f100 ? 'flex: 1 0 0;' : '')}
+    ${(props) => (props.$w100 ? 'width:100%;' : '')}
+
+    &::placeholder {
+        color: var(--color-gray-400);
+    }
+    &:hover {
+        border: 1px solid var(--color-cyan-500);
+    }
+    &:focus {
+        outline: none;
+        border: 1px solid var(--color-cyan-500);
+    }
 `;
 export default Input;

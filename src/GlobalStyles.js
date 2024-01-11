@@ -2,13 +2,22 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
 :root {
-    /* color */
+    /* background */
     --color-bg: #f3f4f6;
+    --color-bg-overlay: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+  
+
+    /* color */
     --color-cyan-500: #06b6d4;
-    --color-cyan-600: #0891b2;
+    --color-cyan-600:#1ba7bf;
     --color-amber-300: #fcd34d;
     --color-amber-400: #fbbf24;
     --color-amber-500: #f59e0b;
+    --color-none:#00000000; /* 完全透明 */
+    /* Error */
+    --color-err-text:#991b1b;
+    --color-err-bg:#fef2f2;
+    --color-err-border:#fca5a5;
 
     /* gray */
     --color-gray-0: #fff;
@@ -27,8 +36,8 @@ const GlobalStyle = createGlobalStyle`
     --color-shadow:var(--color-gray-300);
     --box-shadow: 0 0 8px var(--color-shadow);
 
+    /* 分界線 */
     --divider:1px solid var(--color-gray-200);
-
 }
 *,
 *::before,
