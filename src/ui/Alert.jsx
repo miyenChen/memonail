@@ -21,7 +21,7 @@ const Alert = styled.div`
     padding: 0.5rem 0.75rem;
     gap: 0.5rem;
 
-    ${(props) => variant[props.variant]};
+    ${(props) => variant[props.$variant]};
 `;
 
 Alert.defaultProps = {

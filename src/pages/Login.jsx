@@ -1,28 +1,43 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
 import Form from '../ui/Form';
 import InputGroup from '../ui/InputGroup';
 import Input from '../ui/Input';
-import Dialog from '../ui/Dialog';
+import Alert from '../ui/Alert';
 
 function Login() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
+
+    const handleEmail = (e) => {
+        setEmail(e.target.value);
+    };
+    const handlePassword = (e) => {
+        setPassword(e.target.value);
+    };
     function handleSubmit(e) {
         e.preventDefault();
+        if (!email || !password) {
+            setErrorMsg('請確實填寫所有表格');
+        } else {
+            navigate('/home', { replace: true });
+        }
     }
     return (
         <main>
             <h1>登入</h1>
             <Form onSubmit={handleSubmit}>
+                {errorMsg && <Alert $variant="error">{errorMsg}</Alert>}
                 <InputGroup>
                     <label htmlFor="email">信箱</label>
                     <Input
                         type="email"
                         id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.email)}
+                        name="email"
+                        onChange={handleEmail}
                         placeholder="e-mail"
                     />
                 </InputGroup>
@@ -31,12 +46,12 @@ function Login() {
                     <Input
                         type="password"
                         id="password"
-                        value={password}
-                        onChange={(e) => setEmail(e.target.password)}
+                        name="password"
+                        onChange={handlePassword}
                         placeholder="密碼"
                     />
                 </InputGroup>
-                <Button>登入</Button>
+                <Button type="sumbit">登入</Button>
             </Form>
             <p>
                 還不是會員嗎? <Link to="/user/register">立即註冊</Link>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Input = styled.input.attrs((props) => ({ type: 'text' }))`
+const Input = styled.input`
     border: 1px solid var(--color-gray-400);
     border-radius: 0.25rem;
     padding: 0.5rem;

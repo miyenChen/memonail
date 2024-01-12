@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Terms from '../features/auth/Terms';
 import Button from '../ui/Button';
@@ -34,28 +34,54 @@ const TermsText = styled.div`
 `;
 
 function Register() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMsg, seterrorMsg] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
     const [openTerms, setOpenTerms] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
 
-    function handleSubmit(e) {
+    const handleUsername = (e) => {
+        setUsername(e.target.value);
+    };
+    const handleEmail = (e) => {
+        setEmail(e.target.value);
+    };
+    const handlePassword = (e) => {
+        setPassword(e.target.value);
+    };
+    const handleTerms = (e) => {
+        setIsChecked(e.target.checked);
+    };
+    const handleSubmit = (e) => {
         e.preventDefault();
-    }
+
+        if (!username || !email || !password) {
+            setErrorMsg('請確實填寫所有表格');
+            return;
+        } else if (password.length < 6) {
+            setErrorMsg('密碼不得低於6位數');
+        } else if (!isChecked) {
+            setErrorMsg('請閱讀服務條款後，勾選以表示同意內容');
+        } else {
+            navigate('/home', { replace: true });
+        }
+    };
     return (
         <main>
             <h1>註冊</h1>
             <Form onSubmit={handleSubmit}>
-                {errorMsg && <Alert>{errorMsg}</Alert>}
+                {errorMsg && <Alert $variant="error">{errorMsg}</Alert>}
                 <InputGroup>
                     <label htmlFor="username">用戶名</label>
                     <Input
-                        type="username"
+                        type="text"
                         id="username"
-                        value={username}
-                        onChange={(e) => setEmail(e.target.username)}
+                        name="username"
+                        onChange={handleUsername}
                         placeholder="用戶名"
+                        required
                     />
                 </InputGroup>
                 <InputGroup>
@@ -63,9 +89,10 @@ function Register() {
                     <Input
                         type="email"
                         id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.email)}
+                        name="email"
+                        onChange={handleEmail}
                         placeholder="e-mail"
+                        required
                     />
                 </InputGroup>
                 <InputGroup>
@@ -73,13 +100,14 @@ function Register() {
                     <Input
                         type="password"
                         id="password"
-                        value={password}
-                        onChange={(e) => setEmail(e.target.password)}
-                        placeholder="密碼"
+                        name="password"
+                        onChange={handlePassword}
+                        placeholder="密碼不得低於6位數"
+                        required
                     />
                 </InputGroup>
-                <Checkbox id="terms">
-                    我已經閱讀過且同意
+                <Checkbox id="terms" checked={isChecked} onChange={handleTerms}>
+                    (必選)我已經閱讀過且同意
                     <Span
                         onClick={() => {
                             setOpenTerms(true);
@@ -87,7 +115,7 @@ function Register() {
                         服務條款
                     </Span>
                 </Checkbox>
-                <Button>註冊</Button>
+                <Button type="sumbit">註冊</Button>
             </Form>
             <p>
                 已經有帳號了? <Link to="/user/login">立即登入</Link>
