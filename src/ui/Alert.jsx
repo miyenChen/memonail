@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const variant = {
+const variations = {
     'primary': css`
         border: 1px solid var(--color-gray-300);
         background-color: var(--color-none);
@@ -21,10 +21,11 @@ const Alert = styled.div`
     padding: 0.5rem 0.75rem;
     gap: 0.5rem;
 
-    ${(props) => variant[props.$variant]};
+    ${(props) => variations[props.$variation]};
 `;
 
 Alert.defaultProps = {
-    variant: 'primary',
+    $variation: 'primary',
 };
+
 export default Alert;

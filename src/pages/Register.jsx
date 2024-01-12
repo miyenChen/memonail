@@ -72,7 +72,7 @@ function Register() {
         <main>
             <h1>註冊</h1>
             <Form onSubmit={handleSubmit}>
-                {errorMsg && <Alert $variant="error">{errorMsg}</Alert>}
+                {errorMsg && <Alert $variation="error">{errorMsg}</Alert>}
                 <InputGroup>
                     <label htmlFor="username">用戶名</label>
                     <Input

@@ -30,7 +30,7 @@ function Login() {
         <main>
             <h1>登入</h1>
             <Form onSubmit={handleSubmit}>
-                {errorMsg && <Alert $variant="error">{errorMsg}</Alert>}
+                {errorMsg && <Alert $variation="error">{errorMsg}</Alert>}
                 <InputGroup>
                     <label htmlFor="email">信箱</label>
                     <Input

@@ -27,7 +27,7 @@ const Button = styled.button`
     gap: 0.25rem;
     cursor: pointer;
 
-    ${(props) => size[props.size]}
+    ${(props) => size[props.$size]}
     ${(props) => (props.$w100 ? 'width: 100%;' : '')}
 
     &:hover {
@@ -35,6 +35,6 @@ const Button = styled.button`
     }
 `;
 Button.defaultProps = {
-    size: 'normal',
+    $size: 'normal',
 };
 export default Button;

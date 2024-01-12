@@ -98,8 +98,8 @@ function Intro() {
                         Memonail 更簡單的開始你的旅程
                     </h1>
                     <img src={intro} alt="intro img" />
-                    <Link to="register">
-                        <HeroButton size="large">
+                    <Link to="/user/register">
+                        <HeroButton $size="large">
                             免費開始
                             <Icon>
                                 <FiArrowRight color="white" />
