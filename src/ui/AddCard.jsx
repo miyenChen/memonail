@@ -26,7 +26,7 @@ function AddCard() {
     return (
         <StyledAddCard>
             <FiPlusCircle />
-            <span>新增行程</span>
+            <span>新增</span>
         </StyledAddCard>
     );
 }
