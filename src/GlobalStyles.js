@@ -8,17 +8,17 @@ const GlobalStyle = createGlobalStyle`
   
 
     /* color */
+    --color-none:#00000000; /* 完全透明 */
     --color-cyan-500: #06b6d4;
     --color-cyan-600:#1ba7bf;
     --color-amber-300: #fcd34d;
     --color-amber-400: #fbbf24;
     --color-amber-500: #f59e0b;
-    --color-none:#00000000; /* 完全透明 */
-    /* Error */
-    --color-err-text:#991b1b;
-    --color-err-bg:#fef2f2;
-    --color-err-border:#fca5a5;
-
+    --color-red-100:#fef2f2;
+    --color-red-300:#fca5a5;
+    --color-red-500:#ef4444;
+    --color-red-800:#991b1b;
+    
     /* gray */
     --color-gray-0: #fff;
     --color-gray-50: #f9fafb;
@@ -32,7 +32,13 @@ const GlobalStyle = createGlobalStyle`
     --color-gray-800: #1f2937;
     --color-gray-900: #111827;
 
+     /* Error */
+     --color-err-text:var(--color-red-800);
+    --color-err-bg:var(--color-red-100);
+    --color-err-border:var(--color-red-300);
+
     /* shadow */
+    --color-border:var(--color-gray-300);
     --color-shadow:var(--color-gray-300);
     --box-shadow: 0 0 8px var(--color-shadow);
 

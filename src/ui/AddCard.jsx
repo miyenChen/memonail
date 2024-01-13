@@ -22,9 +22,9 @@ const StyledAddCard = styled(Card)`
         font-weight: 700;
     }
 `;
-function AddCard() {
+function AddCard({ onClick }) {
     return (
-        <StyledAddCard>
+        <StyledAddCard onClick={onClick}>
             <FiPlusCircle />
             <span>新增</span>
         </StyledAddCard>

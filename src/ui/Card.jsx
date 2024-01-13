@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
-const Card = styled.li`
-    list-style: none;
+const Card = styled.div`
     background-color: var(--color-gray-0);
     border: 2px solid var(--color-gray-0);
     border-radius: 0.5rem;

@@ -1,31 +1,96 @@
 import styled from 'styled-components';
 import CardPlace from './CardPlace';
 import Card from '../../ui/Card';
+import { FiMapPin } from 'react-icons/fi';
+import TagList from '../../ui/TagList';
+import Tag from '../../ui/tag';
+import { FiImage } from 'react-icons/fi';
 
-const Text = styled.p`
-    max-height: none;
+const StyledMemoList = styled(Card)`
+    display: flex;
+    align-items: center;
+`;
+const TextContainer = styled.div`
+    flex: 1;
+    height: 100%;
+    margin-right: 0.75rem;
 
-    @media screen and (min-width: 768px) {
-        --max-lines: 3;
-        --line-height: 1.5;
-        max-height: calc(1em * var(--max-lines) * var(--line-height));
-        overflow: hidden;
+    & p:first-child {
+        font-size: 0.875rem;
+        width: 700;
+    }
+`;
+const TagContainer = styled(TagList)`
+    margin: 0.25rem 0 0.5rem;
+    & li {
+        color: var(--color-amber-400);
+        border-color: var(--color-amber-400);
+    }
+`;
+const ImgContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-gray-200);
+    border-radius: 0.25rem;
+    width: 5rem;
+    height: 5rem;
+`;
+const LocationContainer = styled.div`
+    display: flex;
+    border-top: var(--divider);
+    margin-top: 0.5rem;
+    gap: 0.5rem;
+`;
+const Place = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    & p {
+        padding: 0.25rem 0;
+        font-size: 0.875rem;
+    }
+    & svg {
+        color: var(--color-red-500);
     }
 `;
 
-function MemoListCard() {
+function MemoListCard({ dateCreated = '', content = '', locations = [], imgfiles = [] }) {
+    const regex = /#([\p{L}\d]+)/gu;
+    const matches = [...content.matchAll(regex)];
+    const tags = matches.map((match) => match[1]);
+    const newText = content.replace(regex, '');
+
     return (
-        <Card>
-            <h3>title</h3>
-            <p>date</p>
-            <Text>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam sed, libero
-                temporibus beatae autem inventore voluptas eius sequi rem illo aut aperiam. Lorem
-                ipsum dolor sit amet consectetur adipisicing elit. Ipsam sed, libero temporibus
-                beatae autem inventore voluptas eius sequi rem illo aut aperiam.
-            </Text>
-            <CardPlace />
-        </Card>
+        <StyledMemoList>
+            <TextContainer>
+                <p>{dateCreated}</p>
+                <TagContainer>
+                    {tags.map((tag, index) => (
+                        <Tag key={index}>{tag}</Tag>
+                    ))}
+                </TagContainer>
+                <p>{newText}</p>
+                {locations.length > 0 && (
+                    <LocationContainer>
+                        {locations.map((loction, index) => (
+                            <Place>
+                                <FiMapPin />
+                                <p>{loction}</p>
+                            </Place>
+                        ))}
+                    </LocationContainer>
+                )}
+            </TextContainer>
+            <ImgContainer>
+                {imgfiles.length === 0 ? (
+                    <FiImage />
+                ) : (
+                    <img src={imgfiles[0] || ''} alt="" width="100%" />
+                )}
+            </ImgContainer>
+        </StyledMemoList>
     );
 }
 export default MemoListCard;

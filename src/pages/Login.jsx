@@ -29,7 +29,7 @@ function Login() {
     return (
         <main>
             <h1>登入</h1>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} $padding="0.75rem">
                 {errorMsg && <Alert $variation="error">{errorMsg}</Alert>}
                 <InputGroup>
                     <label htmlFor="email">信箱</label>
@@ -51,7 +51,7 @@ function Login() {
                         placeholder="密碼"
                     />
                 </InputGroup>
-                <Button type="sumbit">登入</Button>
+                <Button type="submit">登入</Button>
             </Form>
             <p>
                 還不是會員嗎? <Link to="/user/register">立即註冊</Link>

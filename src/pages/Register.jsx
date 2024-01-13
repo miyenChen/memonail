@@ -7,7 +7,7 @@ import Form from '../ui/Form';
 import InputGroup from '../ui/InputGroup';
 import Input from '../ui/Input';
 import Checkbox from '../ui/Checkbox';
-import Dialog from '../ui/Dialog';
+import { Dialog, DialogCloseBtn, DialogContent, DialogHeader, DialogTitle } from '../ui/Dialog';
 import Alert from '../ui/Alert';
 
 const Span = styled.span`
@@ -20,10 +20,8 @@ const Span = styled.span`
     }
 `;
 const TermsText = styled.div`
-    margin: 1.5rem 0.5rem;
+    padding: 1.5rem;
     font-size: 0.75em;
-    height: 50vh;
-    overflow: auto;
     & h1,
     h2,
     h3 {
@@ -71,7 +69,7 @@ function Register() {
     return (
         <main>
             <h1>註冊</h1>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} $padding="0.75rem">
                 {errorMsg && <Alert $variation="error">{errorMsg}</Alert>}
                 <InputGroup>
                     <label htmlFor="username">用戶名</label>
@@ -107,7 +105,7 @@ function Register() {
                     />
                 </InputGroup>
                 <Checkbox id="terms" checked={isChecked} onChange={handleTerms}>
-                    (必選)我已經閱讀過且同意
+                    (必須)我已經閱讀過且同意
                     <Span
                         onClick={() => {
                             setOpenTerms(true);
@@ -115,15 +113,21 @@ function Register() {
                         服務條款
                     </Span>
                 </Checkbox>
-                <Button type="sumbit">註冊</Button>
+                <Button type="submit">註冊</Button>
             </Form>
             <p>
                 已經有帳號了? <Link to="/user/login">立即登入</Link>
             </p>
             <Dialog isOpened={openTerms} onClose={setOpenTerms}>
-                <TermsText>
-                    <Terms />
-                </TermsText>
+                <DialogHeader>
+                    <DialogTitle>服務條款</DialogTitle>
+                    <DialogCloseBtn isOpened={openTerms} onClose={setOpenTerms} />
+                </DialogHeader>
+                <DialogContent>
+                    <TermsText>
+                        <Terms />
+                    </TermsText>
+                </DialogContent>
             </Dialog>
         </main>
     );

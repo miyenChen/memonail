@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+import Markdown from 'react-markdown';
 
 function Terms() {
     const [content, setContent] = useState('');
@@ -11,6 +11,6 @@ function Terms() {
             .then((res) => res.text())
             .then((text) => setContent(text));
     }, []);
-    return <ReactMarkdown children={content} />;
+    return <Markdown children={content} />;
 }
 export default Terms;

@@ -1,14 +1,12 @@
 import styled from 'styled-components';
-import { FiChevronRight } from 'react-icons/fi';
+import { FiMapPin } from 'react-icons/fi';
 import TagList from '../../ui/TagList';
 import Tag from '../../ui/tag';
-
-const tags = ['台南', '屏東', 'JP'];
 
 const Place = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     border-top: var(--divider);
     padding-top: 0.25rem;
 
@@ -26,15 +24,16 @@ const Place = styled.div`
         font-weight: 700;
     }
 `;
-function CardPlace() {
+function CardPlace({ tags, locations }) {
     return (
         <>
             <Place>
-                <div>
-                    <FiChevronRight />
-                    <p>地點名稱</p>
-                </div>
-                <span>10</span>
+                {locations.map((loction, index) => (
+                    <div>
+                        <FiMapPin />
+                        <p>{loction}</p>
+                    </div>
+                ))}
             </Place>
             <TagList>
                 {tags.map((tag, index) => (
