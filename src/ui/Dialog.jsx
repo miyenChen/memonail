@@ -29,7 +29,7 @@ const Container = styled.div`
     flex-direction: column;
     background-color: #fff;
     border-radius: 0.5rem;
-    max-height: 700px;
+    max-height: ${(props) => props.$maxHeight || '700px'};
     margin: 0.5rem;
 `;
 

@@ -62,7 +62,7 @@ const ImgListItem = styled.li`
     }
 `;
 
-const AddMemo = ({ openAddCard = false, onClose }) => {
+const AddMemo = ({ isOpened = false, onClose }) => {
     const fileInputRef = useRef(null);
     const [content, setContent] = useState('');
     const [imgFiles, setImgFiles] = useState([]);
@@ -111,9 +111,9 @@ const AddMemo = ({ openAddCard = false, onClose }) => {
         setLocations([]);
     }
     return (
-        <Dialog isOpened={openAddCard} onClose={onClose}>
+        <Dialog isOpened={isOpened} onClose={onClose}>
             <DialogHeader $border>
-                <DialogCloseBtn isOpened={openAddCard} onClose={onClose} />
+                <DialogCloseBtn isOpened={isOpened} onClose={onClose} />
                 <DialogTitle>新增筆記</DialogTitle>
             </DialogHeader>
             <StyledForm onSubmit={handleSubmit}>

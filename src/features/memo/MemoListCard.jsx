@@ -1,10 +1,8 @@
 import styled from 'styled-components';
-import CardPlace from './CardPlace';
-import Card from '../../ui/Card';
-import { FiMapPin } from 'react-icons/fi';
+import { FiMapPin, FiImage } from 'react-icons/fi';
 import TagList from '../../ui/TagList';
 import Tag from '../../ui/tag';
-import { FiImage } from 'react-icons/fi';
+import Card from '../../ui/Card';
 
 const StyledMemoList = styled(Card)`
     display: flex;
@@ -42,7 +40,7 @@ const LocationContainer = styled.div`
     margin-top: 0.5rem;
     gap: 0.5rem;
 `;
-const Place = styled.div`
+const LocationItem = styled.div`
     display: flex;
     align-items: center;
     gap: 0.25rem;
@@ -75,10 +73,10 @@ function MemoListCard({ dateCreated = '', content = '', locations = [], imgfiles
                 {locations.length > 0 && (
                     <LocationContainer>
                         {locations.map((loction, index) => (
-                            <Place>
+                            <LocationItem key={index}>
                                 <FiMapPin />
                                 <p>{loction}</p>
-                            </Place>
+                            </LocationItem>
                         ))}
                     </LocationContainer>
                 )}
