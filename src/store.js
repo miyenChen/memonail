@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import memoReducer from './features/memo/memoSlice';
+import memosReducer from './features/memo/memosSlice';
 
 export default configureStore({
     reducer: {
-        memo: memoReducer,
+        memos: memosReducer,
     },
 });

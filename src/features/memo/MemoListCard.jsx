@@ -33,6 +33,7 @@ const ImgContainer = styled.div`
     border-radius: 0.25rem;
     width: 5rem;
     height: 5rem;
+    overflow: hidden;
 `;
 const LocationContainer = styled.div`
     display: flex;
@@ -54,11 +55,18 @@ const LocationItem = styled.div`
     }
 `;
 
-function MemoListCard({ dateCreated = '', content = '', locations = [], imgfiles = [] }) {
-    const regex = /#([\p{L}\d]+)/gu;
-    const matches = [...content.matchAll(regex)];
-    const tags = matches.map((match) => match[1]);
-    const newText = content.replace(regex, '');
+function MemoListCard({ memo, img = [] }) {
+    const {
+        content = memo.content,
+        tags = memo.tags,
+        dateCreated = memo.dateCreated,
+        locations = memo.locations,
+    } = memo;
+
+    // const regex = /#([\p{L}\d]+)/gu;
+    // const matches = [...content.matchAll(regex)];
+    // const tags = matches.map((match) => match[1]);
+    // const newText = content.replace(regex, '');
 
     return (
         <StyledMemoList>
@@ -69,7 +77,7 @@ function MemoListCard({ dateCreated = '', content = '', locations = [], imgfiles
                         <Tag key={index}>{tag}</Tag>
                     ))}
                 </TagContainer>
-                <p>{newText}</p>
+                <p>{content}</p>
                 {locations.length > 0 && (
                     <LocationContainer>
                         {locations.map((loction, index) => (
@@ -82,10 +90,10 @@ function MemoListCard({ dateCreated = '', content = '', locations = [], imgfiles
                 )}
             </TextContainer>
             <ImgContainer>
-                {imgfiles.length === 0 ? (
-                    <FiImage />
+                {img.length > 0 ? (
+                    <img src={img[0].url} alt={img[0].name} width="100%" />
                 ) : (
-                    <img src={imgfiles[0] || ''} alt="" width="100%" />
+                    <FiImage />
                 )}
             </ImgContainer>
         </StyledMemoList>

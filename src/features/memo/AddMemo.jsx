@@ -1,4 +1,7 @@
 import { useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { addMemo } from './memosSlice';
+import { v4 as uuidv4 } from 'uuid';
 import { FiImage, FiMapPin, FiX } from 'react-icons/fi';
 import styled from 'styled-components';
 import IconButton from '../../ui/IconButton';
@@ -70,16 +73,18 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     const [contentHeight, setContentHeight] = useState(160);
     const [textareaHeight, setTextareaHeight] = useState('');
 
+    const dispatch = useDispatch();
+
     const handleIconClick = (e) => {
         e.preventDefault(); //阻止打開檔案時關閉 Dialog
-        fileInputRef.current.click();
+        fileInputRef.current.click(); //將icon點擊的指向到input
     };
 
     const handleFileChange = (e) => {
         const files = e.target.files;
         if (files.length > 0) {
-            const newFiles = Array.from(files);
-            setImgFiles((prevFiles) => [...prevFiles, ...newFiles]);
+            const newFile = files[0];
+            setImgFiles((img) => [...img, newFile]);
         }
     };
 
@@ -101,15 +106,19 @@ const AddMemo = ({ isOpened = false, onClose }) => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        const dateCreated = new Date();
+        let dateCreated = new Date();
+        dateCreated = dateCreated.toLocaleDateString();
 
-        console.log(content, imgFiles, locations, dateCreated);
+        const id = uuidv4();
+        const newMemo = { id, content, locations, dateCreated };
+        dispatch(addMemo(newMemo));
 
-        onClose(!openAddCard);
+        onClose(!isOpened);
         setContent('');
         setImgFiles([]);
         setLocations([]);
     }
+
     return (
         <Dialog isOpened={isOpened} onClose={onClose}>
             <DialogHeader $border>
@@ -123,7 +132,7 @@ const AddMemo = ({ isOpened = false, onClose }) => {
                             $height={textareaHeight}
                             value={content}
                             onChange={handleContent}
-                            placeholder="紀錄任何的小發現..."></Textarea>
+                            placeholder="#tag 紀錄任何的小發現..."></Textarea>
                         {locations.length > 0 && (
                             <div>
                                 <BorderContainer>地點</BorderContainer>
