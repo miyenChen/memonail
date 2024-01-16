@@ -63,11 +63,6 @@ function MemoListCard({ memo, img = [] }) {
         locations = memo.locations,
     } = memo;
 
-    // const regex = /#([\p{L}\d]+)/gu;
-    // const matches = [...content.matchAll(regex)];
-    // const tags = matches.map((match) => match[1]);
-    // const newText = content.replace(regex, '');
-
     return (
         <StyledMemoList>
             <TextContainer>
