@@ -107,23 +107,23 @@ function MainNav() {
             <LogoGroup />
 
             <Nav>
-                <StyledNavLink to="home">
+                <StyledNavLink to="/home">
                     <FiHome />
                     <span>首頁</span>
                 </StyledNavLink>
 
-                <StyledNavLink to="itinerary">
+                <StyledNavLink to="/itinerary">
                     <FiBriefcase />
 
                     <span>行程</span>
                 </StyledNavLink>
 
-                <StyledNavLink to="notification">
+                <StyledNavLink to="/notification">
                     <FiBell />
 
                     <span>通知</span>
                 </StyledNavLink>
-                <StyledNavLink to="setting">
+                <StyledNavLink to="/setting">
                     <FiSettings />
 
                     <span>設定</span>

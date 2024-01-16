@@ -1,16 +1,18 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Layout from './pages/Layout';
-import Intro from './pages/Intro';
 import GlobalStyles from './GlobalStyles';
+import Intro from './pages/Intro';
+import AuthLayout from './pages/AuthLayout';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Layout from './pages/Layout';
+import Home from './pages/Home';
 import Itinerary from './pages/Itinerary';
 import Notification from './pages/Notification';
 import Setting from './pages/Setting';
-import Register from './pages/Register';
-import Login from './pages/Login';
 import Profile from './features/setting/Profile';
 import Account from './features/setting/Account';
-import AuthLayout from './pages/AuthLayout';
+import Map from './features/map/Map';
+import Location from './features/map/Location';
 
 function App() {
     return (
@@ -33,6 +35,10 @@ function App() {
                             <Route path="profile" element={<Profile />} />
                             <Route path="account" element={<Account />} />
                         </Route>
+                    </Route>
+                    <Route path="map" element={<Map />}>
+                        <Route index element={<Navigate to="location" replace />} />
+                        <Route path="location" element={<Location />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

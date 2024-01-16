@@ -4,7 +4,6 @@ import TabList from '../ui/TabList';
 import Tab from '../ui/Tab';
 import AddMemo from '../features/memo/AddMemo';
 import MemoList from '../features/memo/MemoList';
-import AddLocation from '../features/map/AddLocation';
 import LocationList from '../features/map/LocationList';
 
 const Main = styled.main`
@@ -38,11 +37,7 @@ function Home() {
                         <AddMemo isOpened={openAddCard} onClose={setOpenAddCard} />
                     </>
                 )}
-                {toggleList === 2 && (
-                    <>
-                        <LocationList onOpenAdd={handleAddCard} />
-                    </>
-                )}
+                {toggleList === 2 && <LocationList />}
             </Main>
         </>
     );
