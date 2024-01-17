@@ -23,7 +23,7 @@ function Login() {
         if (!email || !password) {
             setErrorMsg('請確實填寫所有表格');
         } else {
-            navigate('/home', { replace: true });
+            navigate('/home');
         }
     }
     return (

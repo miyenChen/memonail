@@ -19,7 +19,7 @@ function LocationList() {
             : locations.filter((location) => location.tags.includes(selected));
 
     function handleAddLocation() {
-        navigate('/map/location', { replace: true });
+        navigate('/map/location');
     }
     return (
         <>

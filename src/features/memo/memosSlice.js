@@ -24,7 +24,7 @@ const demoData = [
         dateCreated: '2022/12/31',
         tags: ['ArtisticSoul', 'CreativityUnleashed', 'ArtInspiration', 'coffee'],
         content: '🎨Embracing the beauty of imperfection in every brushstroke🎨',
-        locations: ['Japan'],
+        locations: ['台北'],
         img: [],
     },
     {

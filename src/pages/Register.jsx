@@ -63,7 +63,7 @@ function Register() {
         } else if (!isChecked) {
             setErrorMsg('請閱讀服務條款後，勾選以表示同意內容');
         } else {
-            navigate('/home', { replace: true });
+            navigate('/home');
         }
     };
     return (
