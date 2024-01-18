@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import TabList from '../ui/TabList';
 import Tab from '../ui/Tab';
-import AddMemo from '../features/memo/AddMemo';
 import MemoList from '../features/memo/MemoList';
 import LocationList from '../features/map/LocationList';
 
@@ -14,11 +13,6 @@ const Main = styled.main`
 `;
 function Home() {
     const [toggleList, setToggleList] = useState(1);
-    const [openAddCard, setOpenAddCard] = useState(false);
-
-    const handleAddCard = () => {
-        setOpenAddCard(true);
-    };
 
     return (
         <>
@@ -31,12 +25,7 @@ function Home() {
                 </Tab>
             </TabList>
             <Main>
-                {toggleList === 1 && (
-                    <>
-                        <MemoList onOpenAdd={handleAddCard} />
-                        <AddMemo isOpened={openAddCard} onClose={setOpenAddCard} />
-                    </>
-                )}
+                {toggleList === 1 && <MemoList />}
                 {toggleList === 2 && <LocationList />}
             </Main>
         </>
