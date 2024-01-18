@@ -13,6 +13,16 @@ const StyledCard = styled(Card)`
     flex-direction: column;
     padding-left: 1rem;
 
+    border: ${(props) => {
+        if (props.$selected) {
+            return '1px solid var(--color-cyan-500)'; // Selected state
+        } else if (props.$border) {
+            return props.$border; // Custom state
+        } else {
+            return 'none'; // Default state
+        }
+    }};
+
     & h3 {
         margin-bottom: 0.25rem;
     }
@@ -55,7 +65,7 @@ const LinkedMemosContainer = styled.ul`
         }
     }
 `;
-function LocationListCard({ location }) {
+function LocationListCard({ location, onClick, selected, $border }) {
     const {
         name = location.name,
         rating = location.rating,
@@ -75,7 +85,7 @@ function LocationListCard({ location }) {
     }
 
     return (
-        <StyledCard>
+        <StyledCard onClick={onClick} $selected={selected} $border={$border}>
             <TagContainer>
                 {tags.map((tag, index) => (
                     <Tag key={index}>{tag}</Tag>

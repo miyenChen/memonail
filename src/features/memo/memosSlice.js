@@ -7,7 +7,10 @@ const demoData = [
         tags: ['陽明山'],
         content:
             '感受大自然的擁抱，用心感受生活的每一個色彩，每一刻都是獨一無二的畫面。 走在城市中，尋找那一抹被遺忘的美好。',
-        locations: ['台北', '擎天崗'],
+        locations: [
+            { id: '', name: '台北' },
+            { id: '', name: '擎天崗' },
+        ],
         img: [
             {
                 url: 'https://www.futureview360.com/wp-content/uploads/2019/02/800px-Taipei_101_2009_amk-642x1024.jpg',
@@ -24,7 +27,7 @@ const demoData = [
         dateCreated: '2022/12/31',
         tags: ['ArtisticSoul', 'CreativityUnleashed', 'ArtInspiration', 'coffee'],
         content: '🎨Embracing the beauty of imperfection in every brushstroke🎨',
-        locations: ['台北'],
+        locations: [{ id: '', name: '台北' }],
         img: [],
     },
     {

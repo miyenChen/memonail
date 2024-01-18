@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { addMemo } from './memosSlice';
+import { updateMemosID } from '../map/locationsSlice';
 import { v4 as uuidv4 } from 'uuid';
 import { FiImage, FiMapPin, FiX } from 'react-icons/fi';
 import styled from 'styled-components';
@@ -14,7 +15,9 @@ import {
     DialogFooter,
     DialogCloseBtn,
     DialogTitle,
+    DialogGoBackBtn,
 } from '../../ui/Dialog';
+import AddMemoLocations from './AddMemoLocations';
 
 const StyledForm = styled(Form)`
     max-height: 640px;
@@ -72,22 +75,25 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     const [locations, setLocations] = useState([]);
     const [contentHeight, setContentHeight] = useState(160);
     const [textareaHeight, setTextareaHeight] = useState('');
+    const [step, setStep] = useState('primary');
+    const [selected, setSelected] = useState([]);
 
     const dispatch = useDispatch();
 
-    const handleIconClick = (e) => {
+    function handleReturnPrimary() {
+        setStep('primary');
+    }
+    function handleOpenAddImg(e) {
         e.preventDefault(); //阻止打開檔案時關閉 Dialog
         fileInputRef.current.click(); //將icon點擊的指向到input
-    };
-
-    const handleFileChange = (e) => {
+    }
+    function handleFileChange(e) {
         const files = e.target.files;
         if (files.length > 0) {
             const newFile = files[0];
             setImgFiles((img) => [...img, newFile]);
         }
-    };
-
+    }
     function handleContent(e) {
         let contentScrollHeight = e.target.scrollHeight;
 
@@ -98,12 +104,16 @@ const AddMemo = ({ isOpened = false, onClose }) => {
             setContentHeight(contentScrollHeight);
         }
     }
-
     function handleImgDelete(index) {
         const updatedFiles = imgFiles.filter((_, i) => i !== index);
         setImgFiles(updatedFiles);
     }
-
+    function handleAddPositions() {
+        //將要儲存的資料提出
+        const Data = selected.map(({ id, name }) => ({ id, name }));
+        setLocations(Data);
+        handleReturnPrimary();
+    }
     function handleSubmit(e) {
         e.preventDefault();
         let dateCreated = new Date();
@@ -111,7 +121,9 @@ const AddMemo = ({ isOpened = false, onClose }) => {
 
         const id = uuidv4();
         const newMemo = { id, content, locations, dateCreated };
+        const updateLocations = { id, locations };
         dispatch(addMemo(newMemo));
+        dispatch(updateMemosID(updateLocations));
 
         onClose(!isOpened);
         setContent('');
@@ -122,66 +134,97 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     return (
         <Dialog isOpened={isOpened} onClose={onClose}>
             <DialogHeader $border>
-                <DialogCloseBtn isOpened={isOpened} onClose={onClose} />
-                <DialogTitle>新增筆記</DialogTitle>
+                {step === 'primary' && (
+                    <>
+                        <DialogCloseBtn isOpened={isOpened} onClose={onClose} />
+                        <DialogTitle>新增筆記</DialogTitle>
+                    </>
+                )}
+                {step === 'addPosition' && (
+                    <>
+                        <DialogGoBackBtn onClick={handleReturnPrimary} />
+                        <DialogCloseBtn isOpened={isOpened} onClose={onClose} />
+                        <DialogTitle>地點</DialogTitle>
+                    </>
+                )}
             </DialogHeader>
             <StyledForm onSubmit={handleSubmit}>
                 <DialogContent>
                     <Wrapper>
-                        <Textarea
-                            $height={textareaHeight}
-                            value={content}
-                            onChange={handleContent}
-                            placeholder="#tag 紀錄任何的小發現..."></Textarea>
-                        {locations.length > 0 && (
-                            <div>
-                                <BorderContainer>地點</BorderContainer>
-                            </div>
+                        {step === 'primary' && (
+                            <>
+                                <Textarea
+                                    $height={textareaHeight}
+                                    value={content}
+                                    onChange={handleContent}
+                                    placeholder="#tag 紀錄任何的小發現..."></Textarea>
+                                {locations.length > 0 && (
+                                    <div>
+                                        {locations.map((location, index) => (
+                                            <BorderContainer key={index}>
+                                                {location.name}
+                                            </BorderContainer>
+                                        ))}
+                                    </div>
+                                )}
+                                {imgFiles.length > 0 && (
+                                    <BorderContainer>
+                                        <ImgList>
+                                            {imgFiles.map((file, index) => (
+                                                <ImgListItem key={index} $column={true}>
+                                                    <IconButton
+                                                        onClick={() => handleImgDelete(index)}
+                                                        $bg="var(--color-gray-0)">
+                                                        <FiX />
+                                                    </IconButton>
+                                                    <img
+                                                        width="100%"
+                                                        src={URL.createObjectURL(file)}
+                                                        alt={`Uploaded ${index + 1}`}
+                                                    />
+                                                </ImgListItem>
+                                            ))}
+                                        </ImgList>
+                                    </BorderContainer>
+                                )}
+                            </>
                         )}
-                        {imgFiles.length > 0 && (
-                            <BorderContainer>
-                                <ImgList>
-                                    {imgFiles.map((file, index) => (
-                                        <ImgListItem key={index} $column={true}>
-                                            <IconButton
-                                                onClick={() => handleImgDelete(index)}
-                                                $bg="var(--color-gray-0)">
-                                                <FiX />
-                                            </IconButton>
-                                            <img
-                                                width="100%"
-                                                src={URL.createObjectURL(file)}
-                                                alt={`Uploaded ${index + 1}`}
-                                            />
-                                        </ImgListItem>
-                                    ))}
-                                </ImgList>
-                            </BorderContainer>
-                        )}
+                        {step === 'addPosition' && <AddMemoLocations onSetSelected={setSelected} />}
                     </Wrapper>
                 </DialogContent>
                 <DialogFooter>
-                    <BorderContainer>
-                        <IconButton onClick={handleIconClick} $color="var(--color-amber-500)">
-                            <FiImage />
-                        </IconButton>
-                        <IconButton
-                            onClick={() => console.log('map')}
-                            $color="var(--color-red-500)">
-                            <FiMapPin />
-                        </IconButton>
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            onChange={handleFileChange}
-                        />
-                    </BorderContainer>
+                    {step === 'primary' && (
+                        <>
+                            <BorderContainer>
+                                <IconButton
+                                    onClick={handleOpenAddImg}
+                                    $color="var(--color-amber-500)">
+                                    <FiImage />
+                                </IconButton>
+                                <IconButton
+                                    onClick={() => setStep('addPosition')}
+                                    $color="var(--color-red-500)">
+                                    <FiMapPin />
+                                </IconButton>
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    onChange={handleFileChange}
+                                />
+                            </BorderContainer>
+                            <Button type="submit" $w100>
+                                新增
+                            </Button>
+                        </>
+                    )}
 
-                    <Button type="submit" $w100>
-                        新增
-                    </Button>
+                    {step === 'addPosition' && (
+                        <Button type="button" onClick={handleAddPositions} $w100>
+                            添加地點 x {selected.length}
+                        </Button>
+                    )}
                 </DialogFooter>
             </StyledForm>
         </Dialog>

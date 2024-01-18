@@ -66,9 +66,9 @@ const StyledGoBack = styled(IconButton)`
     top: 0.75rem;
     left: 0.75rem;
 `;
-function DialogGoBackBtn() {
+function DialogGoBackBtn({ onClick }) {
     return (
-        <StyledGoBack>
+        <StyledGoBack onClick={onClick}>
             <FiArrowLeft />
         </StyledGoBack>
     );

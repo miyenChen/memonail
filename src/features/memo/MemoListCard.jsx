@@ -78,7 +78,7 @@ function MemoListCard({ memo, img = [] }) {
                         {locations.map((loction, index) => (
                             <LocationItem key={index}>
                                 <FiMapPin />
-                                <p>{loction}</p>
+                                <p>{loction.name}</p>
                             </LocationItem>
                         ))}
                     </LocationContainer>

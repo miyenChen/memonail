@@ -77,9 +77,21 @@ export const locationsSlice = createSlice({
             };
             state.locations.push(location);
         },
+        updateMemosID(state, action) {
+            //payload 結構 {memos.id, locations:[{locations.id,locations.name},{//其他被選的地點}]}
+            const data = action.payload;
+            data.locations.forEach((dataLocation) => {
+                const matches = state.locations.find(
+                    (locations) => locations.id === dataLocation.id
+                );
+                if (matches) {
+                    matches.memosID.push(data.id);
+                }
+            });
+        },
     },
 });
 
-export const { addLocation } = locationsSlice.actions;
+export const { addLocation, updateMemosID } = locationsSlice.actions;
 
 export default locationsSlice.reducer;
