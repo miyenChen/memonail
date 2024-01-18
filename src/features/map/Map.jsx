@@ -1,9 +1,11 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
-import { useState, useEffect, useMemo, useRef } from 'react';
-import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import styled from 'styled-components';
+import L from 'leaflet';
+import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurPosition } from './mapsSlice';
 import { Outlet } from 'react-router-dom';
+import styled from 'styled-components';
 import MainNav from '../../ui/MainNav';
 
 const StyledLayout = styled.div`
@@ -38,7 +40,6 @@ const StyledFloat = styled.div`
     background-color: #fff;
     border-radius: 0.5rem;
     width: min(30rem, 90%);
-    height: 20%;
     margin: auto;
     padding: 1rem;
     transition: width 0.6s ease, bottom 0.6s ease, left 0.6s ease-out, transform 0.6s ease;
@@ -54,20 +55,8 @@ const StyledFloat = styled.div`
 `;
 
 function Map() {
-    const center = [25.0646679, 121.5135884];
     const mapRef = useRef(null);
-
-    function Check() {
-        const map = useMapEvents({
-            click: () => {
-                map.locate();
-            },
-            locationfound: (location) => {
-                console.log('location found:', location);
-            },
-        });
-        return null;
-    }
+    const curPosition = useSelector((state) => state.maps.curPosition);
 
     //限制地圖邊界
     function MapBounds() {
@@ -83,44 +72,8 @@ function Map() {
             map.panInsideBounds(worldBounds, { animate: true });
         });
 
-        // console.log('map center:', map.getCenter());
         return null;
     }
-
-    //拖曳座標點
-    // function DraggableMarker() {
-    //     const [draggable, setDraggable] = useState(false);
-    //     const [position, setPosition] = useState(center);
-    //     const markerRef = useRef(null);
-    //     const eventHandlers = useMemo(
-    //         () => ({
-    //             dragend() {
-    //                 const marker = markerRef.current;
-    //                 if (marker != null) {
-    //                     setPosition(marker.getLatLng());
-    //                 }
-    //             },
-    //         }),
-    //         []
-    //     );
-    //     const toggleDraggable = useCallback(() => {
-    //         setDraggable((d) => !d);
-    //     }, []);
-
-    //     return (
-    //         <Marker
-    //             draggable={draggable}
-    //             eventHandlers={eventHandlers}
-    //             position={position}
-    //             ref={markerRef}>
-    //             <Popup minWidth={90}>
-    //                 <span onClick={toggleDraggable}>
-    //                     {draggable ? 'Marker is draggable' : 'Click here to make marker draggable'}
-    //                 </span>
-    //             </Popup>
-    //         </Marker>
-    //     );
-    // }
 
     return (
         <StyledLayout>
@@ -131,7 +84,7 @@ function Map() {
                 </StyledFloat>
                 <StyledMap>
                     <MapContainer
-                        center={center}
+                        center={curPosition}
                         zoom={13}
                         minZoom={3}
                         scrollWheelZoom={true}
@@ -141,9 +94,10 @@ function Map() {
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
                         />
+
                         <MapBounds />
-                        {/* <DraggableMarker /> */}
-                        <Check />
+                        <ChangeCenter position={curPosition} />
+                        <ClickMap />
                     </MapContainer>
                 </StyledMap>
             </Container>
@@ -151,3 +105,22 @@ function Map() {
     );
 }
 export default Map;
+
+//改變地圖畫面中心
+function ChangeCenter({ position }) {
+    const map = useMap();
+    map.setView(position);
+
+    return null;
+}
+
+//點擊地圖更新點擊座標
+function ClickMap() {
+    const dispatch = useDispatch();
+    const map = useMap(); //配合 mapRef 抓取實例
+
+    map.on('click', (e) => {
+        const newPosition = [e.latlng.lat, e.latlng.lng];
+        dispatch(setCurPosition(newPosition));
+    });
+}

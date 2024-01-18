@@ -12,6 +12,7 @@ import Setting from './pages/Setting';
 import Profile from './features/setting/Profile';
 import Account from './features/setting/Account';
 import Map from './features/map/Map';
+import LocationForm from './features/map/LocationForm';
 import Location from './features/map/Location';
 
 function App() {
@@ -38,7 +39,8 @@ function App() {
                     </Route>
                     <Route path="map" element={<Map />}>
                         <Route index element={<Navigate to="location" replace />} />
-                        <Route path="location" element={<Location />} />
+                        <Route path="location" element={<LocationForm />} />
+                        <Route path="location/:id" element={<Location />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

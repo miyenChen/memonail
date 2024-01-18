@@ -5,6 +5,7 @@ const demoLoctions = [
         id: '123',
         name: '台北',
         position: [20, 50],
+        address: '',
         rating: 2,
         tags: ['coffee'],
         memosID: ['456', '123'],
@@ -13,6 +14,7 @@ const demoLoctions = [
         id: '456',
         name: '擎天崗',
         position: [21, 30],
+        address: '',
         rating: 4,
         tags: ['未分類'],
         memosID: ['123'],
@@ -21,6 +23,7 @@ const demoLoctions = [
         id: '153',
         name: '石三鍋-綠島店',
         position: [65, 24],
+        address: '',
         rating: 3,
         tags: ['restaurant'],
         memosID: [],
@@ -54,9 +57,29 @@ const initialState = { 'locations': demoLoctions, 'allTags': sortedTags };
 export const locationsSlice = createSlice({
     name: 'locations',
     initialState,
-    reducers: {},
+    reducers: {
+        addLocation(state, action) {
+            const { content = action.payload.content, ...rest } = action.payload;
+
+            //將content中的tags和文字分別存
+            const regex = /#([\p{L}\d]+)/gu;
+            const matches = [...content.matchAll(regex)];
+            let tags = matches.map((match) => match[1]);
+            if (tags.length === 0) {
+                tags.push('未分類');
+            }
+            const newText = content.replace(regex, '');
+
+            const location = {
+                name: newText,
+                tags,
+                ...rest,
+            };
+            state.locations.push(location);
+        },
+    },
 });
 
-export const {} = locationsSlice.actions;
+export const { addLocation } = locationsSlice.actions;
 
 export default locationsSlice.reducer;

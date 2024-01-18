@@ -18,8 +18,8 @@ const IconButton = styled.div`
         cursor: pointer;
     }
     & svg {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: ${(props) => props.$iconSize || '1.5rem'};
+        height: ${(props) => props.$iconSize || '1.5rem'};
     }
 `;
 export default IconButton;
