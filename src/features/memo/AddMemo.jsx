@@ -40,7 +40,7 @@ const Textarea = styled.textarea`
     border: none;
     font-size: 1.5rem;
     width: 100%;
-    height: ${(props) => (props.$height ? props.$height : '10rem')};
+    height: ${(props) => (props.$height ? props.$height : '10.5rem')};
 
     &::placeholder {
         color: var(--color-gray-400);
@@ -73,7 +73,6 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     const [content, setContent] = useState('');
     const [imgFiles, setImgFiles] = useState([]);
     const [locations, setLocations] = useState([]);
-    const [contentHeight, setContentHeight] = useState(160);
     const [textareaHeight, setTextareaHeight] = useState('');
     const [step, setStep] = useState('primary');
     const [selected, setSelected] = useState([]);
@@ -95,13 +94,18 @@ const AddMemo = ({ isOpened = false, onClose }) => {
         }
     }
     function handleContent(e) {
-        let contentScrollHeight = e.target.scrollHeight;
+        //取得內容和取得換行次數
+        const value = e.target.value;
+        const reg = new RegExp('\n', 'gm');
+        const matchText = value.match(reg);
+        setContent(value);
 
-        setContent(e.target.value);
-
-        if (contentScrollHeight > contentHeight) {
-            setTextareaHeight(`${contentScrollHeight}px`);
-            setContentHeight(contentScrollHeight);
+        if (matchText.length > 5) {
+            //大於初始高度時，多的行數 *增加的高度
+            const newHeight = (matchText.length - 5) * 1.75 + 10.5;
+            setTextareaHeight(`${newHeight}rem`);
+        } else {
+            setTextareaHeight(`10.5rem`);
         }
     }
     function handleImgDelete(index) {
@@ -129,6 +133,9 @@ const AddMemo = ({ isOpened = false, onClose }) => {
         setContent('');
         setImgFiles([]);
         setLocations([]);
+
+        //文字框高度初始化
+        setTextareaHeight('');
     }
 
     return (

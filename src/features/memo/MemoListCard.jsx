@@ -17,6 +17,9 @@ const TextContainer = styled.div`
         font-size: 0.875rem;
         width: 700;
     }
+    & pre {
+        white-space: pre-wrap;
+    }
 `;
 const TagContainer = styled(TagList)`
     margin: 0.25rem 0 0.5rem;
@@ -72,7 +75,7 @@ function MemoListCard({ memo, img = [] }) {
                         <Tag key={index}>{tag}</Tag>
                     ))}
                 </TagContainer>
-                <p>{content}</p>
+                <pre>{content}</pre>
                 {locations.length > 0 && (
                     <LocationContainer>
                         {locations.map((loction, index) => (
