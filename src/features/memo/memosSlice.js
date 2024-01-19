@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useTagExtraction } from '../../hooks/useTagExtraction';
+import { useSortTags } from '../../hooks/useSortTags';
+import { useGetAllTags } from '../../hooks/useGetAllTags';
 
-const demoData = [
+const demoMemos = [
     {
         id: '123',
         dateCreated: '2021/01/14',
@@ -44,12 +47,11 @@ const demoData = [
         ],
     },
 ];
-//將demo中的tags展平後用 Set得到唯一值的數據，再存成Array
-const allTags = Array.from(new Set(demoData.flatMap((memo) => memo.tags)));
 
+const allTags = useGetAllTags(demoMemos);
 const initialState = {
-    memos: demoData,
-    allTags,
+    memos: demoMemos,
+    allTags: allTags,
 };
 
 export const memosSlice = createSlice({
@@ -59,25 +61,22 @@ export const memosSlice = createSlice({
         addMemo(state, action) {
             const { content = action.payload.content, ...rest } = action.payload;
 
-            //將content中的tags和文字分別存
-            const regex = /#([\p{L}\d]+)/gu;
-            const matches = [...content.matchAll(regex)];
-            const tags = matches.map((match) => match[1]);
-            const newText = content.replace(regex, '');
+            //將content分離成標籤和文字，並將標籤排序
+            const data = useTagExtraction(content);
+            const { newContent = data.text, tags = data.tags } = data;
+            const sortedTags = useSortTags(tags);
 
             //將處理後的內容儲存到狀態中
             const memo = {
-                content: newText,
-                tags,
+                content: newContent,
+                tags: sortedTags,
                 ...rest,
             };
             state.memos.push(memo);
 
-            memo.tags.forEach((tag) => {
-                if (!state.allTags.includes(tag)) {
-                    state.allTags.push(tag);
-                }
-            });
+            //從更新後的 memos 取得新的 allTags 並替換
+            const newAllTags = useGetAllTags(state.memos);
+            state.allTags = newAllTags;
         },
     },
 });

@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useTagExtraction } from '../../hooks/useTagExtraction';
+import { useSortTags } from '../../hooks/useSortTags';
+import { useGetAllTags } from '../../hooks/useGetAllTags';
 
 const demoLoctions = [
     {
@@ -30,29 +33,8 @@ const demoLoctions = [
     },
 ];
 
-function sortTags(allTags) {
-    allTags.sort((a, b) => {
-        //獲得兩者的第一個字母
-        const aFirstChar = a.charAt(0).toLowerCase();
-        const bFirstChar = b.charAt(0).toLowerCase();
-
-        //用字母的 Unicode 值進行比較
-        if (aFirstChar < bFirstChar) return -1;
-        if (aFirstChar > bFirstChar) return 1;
-
-        //如果第一個字母相同用 localeCompare 比較整個字串，得到 -1 || 1 || 0
-        return a.localeCompare(b);
-    });
-    //將 "未分類" 提出來排到第一個
-    const sortedTags = ['未分類', ...allTags.filter((tag) => tag !== '未分類')];
-
-    return sortedTags;
-}
-
-const allTags = Array.from(new Set(demoLoctions.flatMap((location) => location.tags)));
-const sortedTags = sortTags(allTags);
-
-const initialState = { 'locations': demoLoctions, 'allTags': sortedTags };
+const allTags = useGetAllTags(demoLoctions);
+const initialState = { 'locations': demoLoctions, 'allTags': allTags };
 
 export const locationsSlice = createSlice({
     name: 'locations',
@@ -61,21 +43,22 @@ export const locationsSlice = createSlice({
         addLocation(state, action) {
             const { content = action.payload.content, ...rest } = action.payload;
 
-            //將content中的tags和文字分別存
-            const regex = /#([\p{L}\d]+)/gu;
-            const matches = [...content.matchAll(regex)];
-            let tags = matches.map((match) => match[1]);
-            if (tags.length === 0) {
-                tags.push('未分類');
-            }
-            const newText = content.replace(regex, '');
+            //將content分離成標籤和文字，並將標籤排序
+            const data = useTagExtraction(content);
+            const { newContent = data.text, tags = data.tags } = data;
+            const sortedTags = useSortTags(tags);
 
+            //將處理後的內容儲存到狀態中
             const location = {
-                name: newText,
-                tags,
+                name: newContent,
+                tags: sortedTags,
                 ...rest,
             };
             state.locations.push(location);
+
+            //從更新後的 locations 取得新的 allTags 並替換
+            const newAllTags = useGetAllTags(state.locations);
+            state.allTags = newAllTags;
         },
         updateMemosID(state, action) {
             //payload 結構 {memos.id, locations:[{locations.id,locations.name},{//其他被選的地點}]}
