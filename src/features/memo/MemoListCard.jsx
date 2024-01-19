@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FiMapPin, FiImage } from 'react-icons/fi';
 import TagList from '../../ui/TagList';
-import Tag from '../../ui/tag';
+import Tag from '../../ui/Tag';
 import Card from '../../ui/Card';
+import { useSelector } from 'react-redux';
 
 const StyledMemoList = styled(Card)`
     display: flex;
@@ -65,6 +67,12 @@ function MemoListCard({ memo, img = [] }) {
         dateCreated = memo.dateCreated,
         locations = memo.locations,
     } = memo;
+    const data = useSelector((state) => state.locations.locations);
+    const [locationNames, setLocationNames] = useState('');
+
+    useEffect(() => {
+        setLocationNames(data.filter((location) => locations.includes(location.id)));
+    }, [data, locations]);
 
     return (
         <StyledMemoList>
@@ -76,9 +84,9 @@ function MemoListCard({ memo, img = [] }) {
                     ))}
                 </TagContainer>
                 <pre>{content}</pre>
-                {locations.length > 0 && (
+                {locationNames.length > 0 && (
                     <LocationContainer>
-                        {locations.map((loction, index) => (
+                        {locationNames.map((loction, index) => (
                             <LocationItem key={index}>
                                 <FiMapPin />
                                 <p>{loction.name}</p>

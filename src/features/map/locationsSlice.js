@@ -60,6 +60,10 @@ export const locationsSlice = createSlice({
             const newAllTags = useGetAllTags(state.locations);
             state.allTags = newAllTags;
         },
+        deleteLocation(state, action) {
+            const newArray = state.locations.filter((item) => item.id !== action.payload);
+            state.locations = newArray;
+        },
         updateMemosID(state, action) {
             //payload 結構 {memos.id, locations:[{locations.id,locations.name},{//其他被選的地點}]}
             const data = action.payload;
@@ -75,6 +79,6 @@ export const locationsSlice = createSlice({
     },
 });
 
-export const { addLocation, updateMemosID } = locationsSlice.actions;
+export const { addLocation, deleteLocation, updateMemosID } = locationsSlice.actions;
 
 export default locationsSlice.reducer;

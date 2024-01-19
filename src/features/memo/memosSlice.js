@@ -10,10 +10,7 @@ const demoMemos = [
         tags: ['陽明山'],
         content:
             '感受大自然的擁抱，用心感受生活的每一個色彩，每一刻都是獨一無二的畫面。 走在城市中，尋找那一抹被遺忘的美好。',
-        locations: [
-            { id: '', name: '台北' },
-            { id: '', name: '擎天崗' },
-        ],
+        locations: ['123', '456'],
         img: [
             {
                 url: 'https://www.futureview360.com/wp-content/uploads/2019/02/800px-Taipei_101_2009_amk-642x1024.jpg',
@@ -30,7 +27,7 @@ const demoMemos = [
         dateCreated: '2022/12/31',
         tags: ['ArtisticSoul', 'CreativityUnleashed', 'ArtInspiration', 'coffee'],
         content: '🎨Embracing the beauty of imperfection in every brushstroke🎨',
-        locations: [{ id: '', name: '台北' }],
+        locations: ['123'],
         img: [],
     },
     {
@@ -78,9 +75,21 @@ export const memosSlice = createSlice({
             const newAllTags = useGetAllTags(state.memos);
             state.allTags = newAllTags;
         },
+        deleteMemo() {},
+        deleteLocationsID(state, action) {
+            const targetID = action.payload;
+            const newMemos = state.memos.map((memo) => {
+                // 如果 memo.locations 包含要刪除的 ID，則刪除該 ID
+                if (memo.locations.includes(targetID)) {
+                    memo.locations = memo.locations.filter((location) => location !== targetID);
+                }
+                return memo;
+            });
+            state.memos = newMemos;
+        },
     },
 });
 
-export const { addMemo } = memosSlice.actions;
+export const { addMemo, deleteMemo, deleteLocationsID } = memosSlice.actions;
 
 export default memosSlice.reducer;
