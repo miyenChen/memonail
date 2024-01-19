@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useRef } from 'react';
@@ -39,6 +39,7 @@ const StyledFloat = styled.div`
     z-index: 1000;
     background-color: #fff;
     border-radius: 0.5rem;
+    max-height: 92vh;
     width: min(30rem, 90%);
     margin: auto;
     padding: 1rem;
@@ -48,9 +49,10 @@ const StyledFloat = styled.div`
         bottom: 2.2rem;
     }
     @media screen and (min-width: 1280px) {
-        width: 30rem;
-        left: 1rem;
+        left: calc(100% - 30rem - 2.2rem);
         transform: translate(0);
+        width: 30rem;
+        margin: 0;
     }
 `;
 
@@ -94,7 +96,7 @@ function Map() {
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
                         />
-
+                        <Marker position={curPosition} />
                         <MapBounds />
                         <ChangeCenter position={curPosition} />
                         <ClickMap />

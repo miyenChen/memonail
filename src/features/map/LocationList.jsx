@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import AddCard from '../../ui/AddCard';
 import CardList from '../../ui/CardList';
-import LocationListCard from './LocationListCard';
 import AllTagsList from '../../ui/AllTagsList';
+import LocationListCard from './LocationListCard';
 
 function LocationList() {
     const navigate = useNavigate();
@@ -21,10 +21,10 @@ function LocationList() {
     function handleAddLocation() {
         navigate('/map/location');
     }
+
     return (
         <>
             <h1>我的地點</h1>
-
             <AllTagsList allTags={allTags} onSetActived={setSelected} />
             <CardList $col={3}>
                 <AddCard onClick={handleAddLocation} />

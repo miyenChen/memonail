@@ -1,4 +1,3 @@
-import { render } from 'react-dom';
 import styled from 'styled-components';
 
 const Tag = styled.li`
@@ -13,7 +12,7 @@ const Tag = styled.li`
     cursor: pointer;
 
     &:hover {
-        background-color: var(--color-gray-200);
+        ${(props) => (props.$hover ? 'background-color: var(--color-gray-200)' : '')}
     }
     &.active {
         border: 1px solid var(--color-cyan-500);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import TagList from './TagList';
-import Tag from './tag';
+import Tag from './Tag';
 
 function AllTagsList({ allTags, onSetActived }) {
     const [activedTag, setActivedTag] = useState('ALL');
@@ -20,7 +20,8 @@ function AllTagsList({ allTags, onSetActived }) {
                 <Tag
                     className={activedTag === tag ? 'active' : ''}
                     onClick={() => handleActived(tag)}
-                    key={index}>
+                    key={index}
+                    $hover>
                     {tag}
                 </Tag>
             ))}

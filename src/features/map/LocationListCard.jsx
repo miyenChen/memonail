@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { FiMap } from 'react-icons/fi';
 import styled from 'styled-components';
-import { FiPlus } from 'react-icons/fi';
 import Rating from '../../ui/Rating';
 import TagList from '../../ui/TagList';
-import Tag from '../../ui/tag';
+import Tag from '../../ui/Tag';
+import Flex from '../../ui/Flex';
 import Card from '../../ui/Card';
 import IconButton from '../../ui/IconButton';
+import DisplayMemos from './DisplayMemos';
 
 const StyledCard = styled(Card)`
     display: flex;
@@ -22,10 +23,6 @@ const StyledCard = styled(Card)`
             return 'none'; // Default state
         }
     }};
-
-    & h3 {
-        margin-bottom: 0.25rem;
-    }
 `;
 const TagContainer = styled(TagList)`
     margin: 0.25rem 0 0.5rem;
@@ -34,55 +31,16 @@ const TagContainer = styled(TagList)`
         border-color: var(--color-amber-400);
     }
 `;
-const StyledDisplay = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 700;
-    color: var(--color-cyan-500);
-    margin-top: 0.5rem;
 
-    & p {
-        flex: 1;
-    }
-`;
-const CountedLinks = styled.span`
-    color: ${(props) => (props.$color ? 'var(--color-amber-500)' : 'var(--color-gray-400)')};
-`;
-const LinkedMemosContainer = styled.ul`
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    & li {
-        list-style: none;
-        border-radius: 0.5rem;
-        border: 1px solid var(--color-border);
-        padding: 0.5rem;
-
-        &:hover {
-            box-shadow: var(--box-shadow);
-        }
-    }
-`;
 function LocationListCard({ location, onClick, selected, $border }) {
+    const navigate = useNavigate();
     const {
+        id = location.id,
         name = location.name,
         rating = location.rating,
         tags = location.tags,
         links = location.memosID,
     } = location;
-    const memos = useSelector((state) => state.memos.memos);
-    const [linkedMemos, setLinkedMemos] = useState('');
-    const [showMemos, setShowMemos] = useState(false);
-
-    useEffect(() => {
-        setLinkedMemos(memos.filter((memo) => links.includes(memo.id)));
-    }, []);
-
-    function handleShowedMemos() {
-        setShowMemos(!showMemos);
-    }
 
     return (
         <StyledCard onClick={onClick} $selected={selected} $border={$border}>
@@ -92,23 +50,19 @@ function LocationListCard({ location, onClick, selected, $border }) {
                 ))}
             </TagContainer>
             <h3>{name}</h3>
-            <div>
+            <Flex $justifyC="space-between">
                 <Rating defaultRating={rating} />
-            </div>
-            <StyledDisplay onClick={handleShowedMemos}>
-                <p>Memos Link</p>
-                <CountedLinks $color={links.length > 0 ? true : false}>{links.length}</CountedLinks>
-                <IconButton>
-                    <FiPlus />
+                <IconButton
+                    $color="var(--color-amber-500)"
+                    $iconSize="1.2rem"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        navigate(`/map/location/${id}`);
+                    }}>
+                    <FiMap />
                 </IconButton>
-            </StyledDisplay>
-            {showMemos ? (
-                <LinkedMemosContainer>
-                    {linkedMemos.map((memolink, index) => (
-                        <li key={index}>{memolink.content}</li>
-                    ))}
-                </LinkedMemosContainer>
-            ) : null}
+            </Flex>
+            <DisplayMemos links={links} />
         </StyledCard>
     );
 }
