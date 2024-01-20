@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { FiMapPin, FiImage, FiMap, FiMoreHorizontal } from 'react-icons/fi';
 import styled from 'styled-components';
-import { FiMapPin, FiImage } from 'react-icons/fi';
+import IconButton from '../../ui/IconButton';
+import Flex from '../../ui/Flex';
 import TagList from '../../ui/TagList';
 import Tag from '../../ui/Tag';
 import Card from '../../ui/Card';
-import { useSelector } from 'react-redux';
 
 const StyledMemoList = styled(Card)`
     display: flex;
@@ -95,13 +97,23 @@ function MemoListCard({ memo, img = [] }) {
                     </LocationContainer>
                 )}
             </TextContainer>
-            <ImgContainer>
-                {img.length > 0 ? (
-                    <img src={img[0].url} alt={img[0].name} width="100%" />
-                ) : (
-                    <FiImage />
-                )}
-            </ImgContainer>
+            <div>
+                <Flex>
+                    <IconButton $color="var(--color-cyan-500)" $iconSize="1.2rem">
+                        <FiMap />
+                    </IconButton>
+                    <IconButton>
+                        <FiMoreHorizontal />
+                    </IconButton>
+                </Flex>
+                <ImgContainer>
+                    {img.length > 0 ? (
+                        <img src={img[0].url} alt={img[0].name} width="100%" />
+                    ) : (
+                        <FiImage />
+                    )}
+                </ImgContainer>
+            </div>
         </StyledMemoList>
     );
 }

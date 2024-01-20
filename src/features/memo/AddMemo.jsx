@@ -30,6 +30,10 @@ const BorderContainer = styled.div`
     padding: 0.5rem;
     margin-bottom: 0.75rem;
     gap: 0.25rem;
+
+    & p {
+        width: 100%;
+    }
 `;
 const Wrapper = styled.div`
     padding: 1rem;
@@ -108,6 +112,10 @@ const AddMemo = ({ isOpened = false, onClose }) => {
             setTextareaHeight(`10.5rem`);
         }
     }
+    function handleLocDelete(index) {
+        const newLoc = locations.filter((_, i) => i !== index);
+        setLocations(newLoc);
+    }
     function handleImgDelete(index) {
         const updatedFiles = imgFiles.filter((_, i) => i !== index);
         setImgFiles(updatedFiles);
@@ -141,16 +149,11 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     return (
         <Dialog isOpened={isOpened} onClose={onClose}>
             <DialogHeader $border>
-                {step === 'primary' && (
-                    <>
-                        <DialogCloseBtn isOpened={isOpened} onClose={onClose} />
-                        <DialogTitle>新增筆記</DialogTitle>
-                    </>
-                )}
+                <DialogCloseBtn isOpened={isOpened} onClose={onClose} />
+                {step === 'primary' && <DialogTitle>新增筆記</DialogTitle>}
                 {step === 'addPosition' && (
                     <>
                         <DialogGoBackBtn onClick={handleReturnPrimary} />
-                        <DialogCloseBtn isOpened={isOpened} onClose={onClose} />
                         <DialogTitle>地點</DialogTitle>
                     </>
                 )}
@@ -169,7 +172,12 @@ const AddMemo = ({ isOpened = false, onClose }) => {
                                     <div>
                                         {locations.map((location, index) => (
                                             <BorderContainer key={index}>
-                                                {location.name}
+                                                <p>{location.name}</p>
+                                                <IconButton
+                                                    onClick={() => handleLocDelete(index)}
+                                                    $bg="var(--color-gray-0)">
+                                                    <FiX />
+                                                </IconButton>
                                             </BorderContainer>
                                         ))}
                                     </div>
