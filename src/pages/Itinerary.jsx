@@ -1,5 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import ItineraryCard from '../features/Itinerary/ItineraryCard';
+import ItineraryCard from '../features/itinerary/ItineraryCard';
 import CardList from '../ui/CardList';
 import TabList from '../ui/TabList';
 import Tab from '../ui/Tab';
@@ -17,6 +18,7 @@ const TabGroup = styled(Tab)`
 `;
 
 function Itinerary() {
+    const navigate = useNavigate();
     return (
         <StyledItinerary>
             <h2>我的行程</h2>
@@ -41,7 +43,7 @@ function Itinerary() {
 
             <div>
                 <CardList $col={4}>
-                    <AddCard />
+                    <AddCard onClick={(e) => navigate('/map/itineraryEdit')} />
 
                     <ItineraryCard />
                     <ItineraryCard />
