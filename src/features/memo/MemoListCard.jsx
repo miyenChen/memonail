@@ -67,14 +67,15 @@ function MemoListCard({ memo, img = [] }) {
         content = memo.content,
         tags = memo.tags,
         dateCreated = memo.dateCreated,
-        locations = memo.locations,
+        locationsID = memo.locationsID,
     } = memo;
+
     const data = useSelector((state) => state.locations.locations);
     const [locationNames, setLocationNames] = useState('');
 
     useEffect(() => {
-        setLocationNames(data.filter((location) => locations.includes(location.id)));
-    }, [data, locations]);
+        setLocationNames(data.filter((location) => locationsID.includes(location.id)));
+    }, [data]);
 
     return (
         <StyledMemoList>

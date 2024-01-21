@@ -67,7 +67,7 @@ export const locationsSlice = createSlice({
         updateMemosID(state, action) {
             //payload 結構 {memos.id, locations:[{locations.id,locations.name},{//其他被選的地點}]}
             const data = action.payload;
-            data.locations.forEach((dataLocation) => {
+            data.locationsID.forEach((dataLocation) => {
                 const matches = state.locations.find(
                     (locations) => locations.id === dataLocation.id
                 );

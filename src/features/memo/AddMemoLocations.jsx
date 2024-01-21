@@ -14,7 +14,6 @@ const StyledList = styled.ul`
 function AddMemoLocations({ onSetSelected }) {
     const locations = useSelector((state) => state.locations.locations);
     const [selectedLocations, setSelectedLocations] = useState([]);
-    let styledCard = {};
 
     function handleSelectCards(id) {
         setSelectedLocations((cardID) => {
@@ -30,7 +29,7 @@ function AddMemoLocations({ onSetSelected }) {
     useEffect(() => {
         let selectedData = locations.filter((location) => selectedLocations.includes(location.id));
         onSetSelected(selectedData);
-        console.log(selectedData);
+        // console.log(selectedData);
     }, [selectedLocations]);
 
     return (

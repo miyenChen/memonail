@@ -76,10 +76,10 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     const fileInputRef = useRef(null);
     const [content, setContent] = useState('');
     const [imgFiles, setImgFiles] = useState([]);
-    const [locations, setLocations] = useState([]);
+    const [locationsID, setLocationsID] = useState([]);
     const [textareaHeight, setTextareaHeight] = useState('');
     const [step, setStep] = useState('primary');
-    const [selected, setSelected] = useState([]);
+    const [selectedLoc, setSelectedLoc] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -104,7 +104,7 @@ const AddMemo = ({ isOpened = false, onClose }) => {
         const matchText = value.match(reg);
         setContent(value);
 
-        if (matchText.length > 5) {
+        if (matchText && matchText.length > 5) {
             //大於初始高度時，多的行數 *增加的高度
             const newHeight = (matchText.length - 5) * 1.75 + 10.5;
             setTextareaHeight(`${newHeight}rem`);
@@ -113,17 +113,17 @@ const AddMemo = ({ isOpened = false, onClose }) => {
         }
     }
     function handleLocDelete(index) {
-        const newLoc = locations.filter((_, i) => i !== index);
-        setLocations(newLoc);
+        const newLoc = selectedLoc.filter((_, i) => i !== index);
+        setSelectedLoc(newLoc);
     }
     function handleImgDelete(index) {
         const updatedFiles = imgFiles.filter((_, i) => i !== index);
         setImgFiles(updatedFiles);
     }
     function handleAddPositions() {
-        //將要儲存的資料提出
-        const Data = selected.map(({ id, name }) => ({ id, name }));
-        setLocations(Data);
+        const saveID = selectedLoc.map((item) => item.id);
+        console.log(saveID);
+        setLocationsID(saveID);
         handleReturnPrimary();
     }
     function handleSubmit(e) {
@@ -132,15 +132,15 @@ const AddMemo = ({ isOpened = false, onClose }) => {
         dateCreated = dateCreated.toLocaleDateString();
 
         const id = uuidv4();
-        const newMemo = { id, content, locations, dateCreated };
-        const updateLocations = { id, locations };
+        const newMemo = { id, content, locationsID, dateCreated };
+        const updateLocations = { id, locationsID };
         dispatch(addMemo(newMemo));
         dispatch(updateMemosID(updateLocations));
-
+        console.log(newMemo);
         onClose(!isOpened);
         setContent('');
         setImgFiles([]);
-        setLocations([]);
+        setLocationsID([]);
 
         //文字框高度初始化
         setTextareaHeight('');
@@ -168,9 +168,9 @@ const AddMemo = ({ isOpened = false, onClose }) => {
                                     value={content}
                                     onChange={handleContent}
                                     placeholder="#tag 紀錄任何的小發現..."></Textarea>
-                                {locations.length > 0 && (
+                                {selectedLoc.length > 0 && (
                                     <div>
-                                        {locations.map((location, index) => (
+                                        {selectedLoc.map((location, index) => (
                                             <BorderContainer key={index}>
                                                 <p>{location.name}</p>
                                                 <IconButton
@@ -204,7 +204,9 @@ const AddMemo = ({ isOpened = false, onClose }) => {
                                 )}
                             </>
                         )}
-                        {step === 'addPosition' && <AddMemoLocations onSetSelected={setSelected} />}
+                        {step === 'addPosition' && (
+                            <AddMemoLocations onSetSelected={setSelectedLoc} />
+                        )}
                     </Wrapper>
                 </DialogContent>
                 <DialogFooter>
@@ -237,7 +239,7 @@ const AddMemo = ({ isOpened = false, onClose }) => {
 
                     {step === 'addPosition' && (
                         <Button type="button" onClick={handleAddPositions} $w100>
-                            添加地點 x {selected.length}
+                            添加地點 x {selectedLoc.length}
                         </Button>
                     )}
                 </DialogFooter>

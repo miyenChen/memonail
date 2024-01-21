@@ -10,7 +10,7 @@ const demoMemos = [
         tags: ['陽明山'],
         content:
             '感受大自然的擁抱，用心感受生活的每一個色彩，每一刻都是獨一無二的畫面。 走在城市中，尋找那一抹被遺忘的美好。',
-        locations: ['123', '456'],
+        locationsID: ['123', '456'],
         img: [
             {
                 url: 'https://www.futureview360.com/wp-content/uploads/2019/02/800px-Taipei_101_2009_amk-642x1024.jpg',
@@ -27,7 +27,7 @@ const demoMemos = [
         dateCreated: '2022/12/31',
         tags: ['ArtisticSoul', 'CreativityUnleashed', 'ArtInspiration', 'coffee'],
         content: '🎨Embracing the beauty of imperfection in every brushstroke🎨',
-        locations: ['123'],
+        locationsID: ['123'],
         img: [],
     },
     {
@@ -35,7 +35,7 @@ const demoMemos = [
         dateCreated: '2023/11/04',
         tags: ['台中', '咖啡廳', 'coffee'],
         content: ' 今天到草悟道走走，天氣真好! 🎃 ',
-        locations: [],
+        locationsID: [],
         img: [
             {
                 url: 'https://www.acouplecooks.com/wp-content/uploads/2021/08/Cafe-Au-Lait-001s.jpg',
@@ -79,9 +79,9 @@ export const memosSlice = createSlice({
         deleteLocationsID(state, action) {
             const targetID = action.payload;
             const newMemos = state.memos.map((memo) => {
-                // 如果 memo.locations 包含要刪除的 ID，則刪除該 ID
-                if (memo.locations.includes(targetID)) {
-                    memo.locations = memo.locations.filter((location) => location !== targetID);
+                // 如果 memo.locationsID 包含要刪除的 ID，則刪除該 ID
+                if (memo.locationsID.includes(targetID)) {
+                    memo.locationsID = memo.locationsID.filter((location) => location !== targetID);
                 }
                 return memo;
             });
