@@ -16,6 +16,7 @@ import {
     DialogCloseBtn,
     DialogTitle,
     DialogGoBackBtn,
+    ContentPadding,
 } from '../../ui/Dialog';
 import AddMemoLocations from './AddMemoLocations';
 
@@ -34,9 +35,6 @@ const BorderContainer = styled.div`
     & p {
         width: 100%;
     }
-`;
-const Wrapper = styled.div`
-    padding: 1rem;
 `;
 const Textarea = styled.textarea`
     resize: none;
@@ -160,7 +158,7 @@ const AddMemo = ({ isOpened = false, onClose }) => {
             </DialogHeader>
             <StyledForm onSubmit={handleSubmit}>
                 <DialogContent>
-                    <Wrapper>
+                    <ContentPadding>
                         {step === 'primary' && (
                             <>
                                 <Textarea
@@ -207,7 +205,7 @@ const AddMemo = ({ isOpened = false, onClose }) => {
                         {step === 'addPosition' && (
                             <AddMemoLocations onSetSelected={setSelectedLoc} />
                         )}
-                    </Wrapper>
+                    </ContentPadding>
                 </DialogContent>
                 <DialogFooter>
                     {step === 'primary' && (

@@ -1,7 +1,6 @@
 import Form from '../../ui/Form';
 import FormTitle from '../../ui/FormTitle';
 import Section from '../../ui/Section';
-import InputGroup from '../../ui/InputGroup';
 import Button from '../../ui/Button';
 import styled from 'styled-components';
 

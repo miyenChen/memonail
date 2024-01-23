@@ -85,6 +85,9 @@ const DialogContent = styled.div`
     height: 100%;
     overflow-y: auto;
 `;
+const ContentPadding = styled.div`
+    padding: ${(props) => props.$padding || '1rem'};
+`;
 const DialogFooter = styled.footer`
     padding: 1rem;
 `;
@@ -93,6 +96,7 @@ export {
     Dialog,
     DialogHeader,
     DialogContent,
+    ContentPadding,
     DialogFooter,
     DialogTitle,
     DialogCloseBtn,
