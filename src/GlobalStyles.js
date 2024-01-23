@@ -65,6 +65,19 @@ h1,h2,h3,h4{
 a,a:visited{
     text-decoration: none;
 }
-
+.react-datepicker-wrapper{
+    width: 100%
+}
+.react-datepicker__input-container{
+   
+    display: flex;
+    align-items: center;
+}
+.react-datepicker__close-icon::after{
+    font-size: 1rem;
+    background-color: var(--color-cyan-500);
+    width: 1.25rem;
+    height: 1.25rem;
+}
 `;
 export default GlobalStyle;
