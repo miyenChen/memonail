@@ -14,12 +14,27 @@ const size = {
         font-size: 1rem;
     `,
 };
+const variation = {
+    'primary': css`
+        background-color: var(--color-cyan-500);
 
+        &:hover {
+            background-color: var(--color-cyan-600);
+        }
+    `,
+    'secound': css`
+        background-color: var(--color-gray-400);
+
+        &:hover {
+            background-color: var(--color-cyan-600);
+        }
+    `,
+};
 const Button = styled.button`
+    outline: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--color-cyan-500);
     color: var(--color-gray-0);
     font-weight: 700;
     border: none;
@@ -27,14 +42,12 @@ const Button = styled.button`
     gap: 0.25rem;
     cursor: pointer;
 
+    ${(props) => variation[props.$variation]}
     ${(props) => size[props.$size]}
     ${(props) => (props.$w100 ? 'width: 100%;' : '')}
-
-    &:hover {
-        background-color: var(--color-cyan-600);
-    }
 `;
 Button.defaultProps = {
     $size: 'normal',
+    $variation: 'primary',
 };
 export default Button;

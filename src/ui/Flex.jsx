@@ -6,5 +6,7 @@ const Flex = styled.div`
 
     align-items: ${(props) => (props.$justifyC ? props.$alignI : 'center')};
     justify-content: ${(props) => (props.$justifyC ? props.$justifyC : '')};
+    padding: ${(props) => props.$padding || ''};
+    margin: ${(props) => props.$margin || ''};
 `;
 export default Flex;
