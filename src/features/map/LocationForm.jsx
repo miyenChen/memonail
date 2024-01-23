@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useReverseGeocode } from '../../hooks/useReverseGeocode';
 import { FiEdit, FiCheckSquare } from 'react-icons/fi';
@@ -12,6 +12,7 @@ import IconButton from '../../ui/IconButton';
 import Alert from '../../ui/Alert';
 import { addLocation } from './locationsSlice';
 import { useNavigate } from 'react-router-dom';
+import { setMapFloatHeight } from './mapsSlice';
 
 const StyledLoactionForm = styled(Form)`
     height: 100%;
@@ -38,6 +39,10 @@ function LocationForm() {
     const [address, setAddress] = useState(apiAddress);
     const [mode, setMode] = useState('view');
     const [errorMsg, setErrorMsg] = useState('');
+
+    useEffect(() => {
+        dispatch(setMapFloatHeight('auto'));
+    }, []);
 
     const handleEditAddress = () => {
         setMode('edit');

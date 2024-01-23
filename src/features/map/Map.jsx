@@ -40,6 +40,7 @@ const StyledFloat = styled.div`
     background-color: #fff;
     border-radius: 0.5rem;
     max-height: 92vh;
+    height: ${(props) => props.$height || ''};
     width: min(30rem, 90%);
     margin: auto;
     padding: 1rem;
@@ -59,6 +60,7 @@ const StyledFloat = styled.div`
 function Map() {
     const mapRef = useRef(null);
     const curPosition = useSelector((state) => state.maps.curPosition);
+    const mapFloatHeight = useSelector((state) => state.maps.mapFloatHeight);
 
     //限制地圖邊界
     function MapBounds() {
@@ -81,7 +83,7 @@ function Map() {
         <StyledLayout>
             <MainNav />
             <Container>
-                <StyledFloat>
+                <StyledFloat $height={mapFloatHeight}>
                     <Outlet />
                 </StyledFloat>
                 <StyledMap>
