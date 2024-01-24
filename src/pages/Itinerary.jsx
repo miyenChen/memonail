@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ItineraryCard from '../features/itinerary/ItineraryCard';
 import CardList from '../ui/CardList';
@@ -16,9 +17,14 @@ const TabGroup = styled(Tab)`
         margin-left: 0.25rem;
     }
 `;
-
 function Itinerary() {
     const navigate = useNavigate();
+    const itinerarys = useSelector((state) => state.itinerarys.itinerarys);
+
+    function handleAddItinerary(id) {
+        navigate('/map/itineraryEdit');
+    }
+
     return (
         <StyledItinerary>
             <h2>我的行程</h2>
@@ -43,10 +49,10 @@ function Itinerary() {
 
             <div>
                 <CardList $col={4}>
-                    <AddCard onClick={(e) => navigate('/map/itineraryEdit')} />
-
-                    <ItineraryCard />
-                    <ItineraryCard />
+                    <AddCard onClick={() => handleAddItinerary()} />
+                    {itinerarys.map((itinerary) => (
+                        <ItineraryCard key={itinerary.id} />
+                    ))}
                 </CardList>
             </div>
         </StyledItinerary>
