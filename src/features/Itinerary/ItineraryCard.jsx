@@ -71,7 +71,7 @@ const StyledListItem = styled.li`
     }
 `;
 
-function ItineraryCard({ itinerary }) {
+function ItineraryCard({ itinerary, onClick }) {
     const {
         id = itinerary.id,
         status = itinerary.status,
@@ -94,7 +94,7 @@ function ItineraryCard({ itinerary }) {
         dispatch(deleteItinerary(id));
     }
     return (
-        <StyledItineraryCard>
+        <StyledItineraryCard onClick={onClick}>
             <ImgContainer>
                 <img
                     src="https://a0.muscache.com/im/pictures/24abe8fc-4f0d-4de9-b4ca-12d01fcc54d7.jpg?im_w=720"

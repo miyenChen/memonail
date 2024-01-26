@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FiCalendar, FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import { v4 as uuidv4 } from 'uuid';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
@@ -58,7 +57,7 @@ const StyledIconBtn = styled(IconButton)`
     transform: translate(-50%);
 `;
 
-function ItineraryEdit() {
+function ItineraryInfo() {
     //edit, loc, show
     const [mode, setMode] = useState('edit');
     const [closeFloat, setCloseFloat] = useState(false);
@@ -70,6 +69,7 @@ function ItineraryEdit() {
     const [totalDays, setTotalDays] = useState(1);
     const [schedules, setSchedules] = useState([]);
     const [status, setStatus] = useState('Todo');
+    const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -123,7 +123,6 @@ function ItineraryEdit() {
             return;
         }
 
-        const id = uuidv4();
         let dateCreated = new Date();
         dateCreated = dateCreated.toLocaleDateString();
 
@@ -141,7 +140,6 @@ function ItineraryEdit() {
             shared: false,
             member: [],
         };
-        console.log(newItinerary);
         dispatch(addItinerary(newItinerary));
         navigate('/itinerary');
     }
@@ -227,4 +225,4 @@ function ItineraryEdit() {
         </StyledContainer>
     );
 }
-export default ItineraryEdit;
+export default ItineraryInfo;

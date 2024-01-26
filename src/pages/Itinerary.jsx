@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components';
 import ItineraryCard from '../features/itinerary/ItineraryCard';
 import CardList from '../ui/CardList';
@@ -70,10 +71,13 @@ function Itinerary() {
         setData(filterItinerary(itinerarys, tab));
     }
 
-    function handleAddItinerary(id) {
-        navigate('/map/itineraryEdit');
+    function handleAddItinerary() {
+        const id = uuidv4();
+        navigate(`/map/itinerary/${id}`);
     }
-
+    function handleClickCard(id) {
+        navigate(`/map/itinerary/${id}`);
+    }
     return (
         <StyledItinerary>
             <h2>我的行程</h2>
@@ -93,7 +97,11 @@ function Itinerary() {
                 <CardList $col={4}>
                     <AddCard onClick={() => handleAddItinerary()} />
                     {data.map((itinerary) => (
-                        <ItineraryCard key={itinerary.id} itinerary={itinerary} />
+                        <ItineraryCard
+                            key={itinerary.id}
+                            itinerary={itinerary}
+                            onClick={() => handleClickCard(itinerary.id)}
+                        />
                     ))}
                 </CardList>
             </div>
