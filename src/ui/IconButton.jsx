@@ -10,8 +10,9 @@ const IconButton = styled.div`
     border-radius: 10rem;
 
     color: ${(props) => props.$color};
-    box-shadow: ${(props) => (props.$shadow ? 'var(--box-shadow)' : '')};
     background-color: ${(props) => props.$bg || 'var(--color-none)'};
+    box-shadow: ${(props) => (props.$shadow ? 'var(--box-shadow)' : '')};
+    position: ${(props) => props.$position || ''};
 
     &:hover {
         background-color: var(--color-gray-100);

@@ -11,8 +11,15 @@ export const itinerarysSlice = createSlice({
         addItinerary(state, action) {
             state.itinerarys.push(action.payload);
         },
+        updateFavorite(state, action) {
+            const { id, favorite } = action.payload;
+            const newData = state.itinerarys.map((itinerary) =>
+                itinerary.id === id ? { ...itinerary, favorite: favorite } : itinerary
+            );
+            return { ...state, itinerarys: newData };
+        },
     },
 });
 
-export const { addItinerary, test } = itinerarysSlice.actions;
+export const { addItinerary, updateFavorite } = itinerarysSlice.actions;
 export default itinerarysSlice.reducer;

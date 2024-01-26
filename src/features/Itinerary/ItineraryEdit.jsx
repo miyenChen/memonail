@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -13,6 +14,7 @@ import Tag from '../../ui/Tag';
 import Input from '../../ui/Input';
 import Alert from '../../ui/Alert';
 import DayContent from './DayContent';
+import PlanStatus from './PlanStatus';
 import ItineraryLocList from './ItineraryLocList';
 import { setMapFloatHeight } from '../map/mapsSlice';
 import { addItinerary } from './itinerarySlice';
@@ -23,14 +25,7 @@ const StyledContainer = styled.div`
     flex-direction: column;
     gap: 0.5rem;
 `;
-const StyledStatus = styled.p`
-    font-size: 0.875rem;
-    border-radius: 0.5rem;
-    border: 1px solid var(--color-cyan-500);
-    color: var(--color-cyan-500);
-    padding: 0.1rem 0.25rem;
-    margin-right: 0.5rem;
-`;
+
 const StyledDatePicker = styled.div`
     flex-grow: 1;
 
@@ -74,7 +69,9 @@ function ItineraryEdit() {
     const [endDate, setEndDate] = useState(null);
     const [totalDays, setTotalDays] = useState(1);
     const [schedules, setSchedules] = useState([]);
+    const [status, setStatus] = useState('Todo');
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     //讓計算天數即時更新
     useEffect(() => {
@@ -132,7 +129,7 @@ function ItineraryEdit() {
 
         const newItinerary = {
             id: id,
-            status: 'todo',
+            status: status,
             title: title,
             img: '',
             dateCreated: dateCreated,
@@ -140,17 +137,18 @@ function ItineraryEdit() {
             dateEnd: endDate.toLocaleDateString(),
             totalDays: totalDays,
             Schedules: schedules,
-            favorite: 'false',
-            shared: 'false',
+            favorite: false,
+            shared: false,
             member: [],
         };
-
+        console.log(newItinerary);
         dispatch(addItinerary(newItinerary));
+        navigate('/itinerary');
     }
     return (
         <StyledContainer>
             <Flex $justifyC="space-between">
-                <StyledStatus>計畫中</StyledStatus>
+                <PlanStatus onSetStatus={setStatus} />
                 {mode === 'show' && <Button $size="small">編輯</Button>}
                 {mode === 'edit' && (
                     <Button onClick={handleSubmit} $size="small">
