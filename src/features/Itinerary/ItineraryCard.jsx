@@ -7,7 +7,7 @@ import IconButton from '../../ui/IconButton';
 import Card from '../../ui/Card';
 import Flex from '../../ui/Flex';
 import Icon from '../../ui/Icon';
-import { updateFavorite } from './itinerarySlice';
+import { deleteItinerary, updateFavorite } from './itinerarySlice';
 
 const StyledItineraryCard = styled(Card)`
     display: flex;
@@ -84,13 +84,15 @@ function ItineraryCard({ itinerary }) {
     const [showOption, setShowOption] = useState(false);
     const dispatch = useDispatch();
 
-    const handleFavorite = () => {
+    function handleFavorite() {
         const newFavorite = !favorite;
         dispatch(updateFavorite({ id, favorite: newFavorite }));
         setFavorite(newFavorite);
         setShowOption(false);
-    };
-
+    }
+    function handleDelete() {
+        dispatch(deleteItinerary(id));
+    }
     return (
         <StyledItineraryCard>
             <ImgContainer>
@@ -133,7 +135,7 @@ function ItineraryCard({ itinerary }) {
                                     <p>添加至收藏</p>
                                 </StyledListItem>
                             )}
-                            <StyledListItem>
+                            <StyledListItem onClick={handleDelete}>
                                 <Icon>
                                     <FiTrash2 />
                                 </Icon>

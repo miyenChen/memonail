@@ -51,7 +51,11 @@ function Itinerary() {
     const [data, setData] = useState(itinerarys);
     const [tabCount, setTabCount] = useState(0);
 
+    //監控 itinerarys 變化，即時更新
     useEffect(() => {
+        const filteredData = filterItinerary(itinerarys, tabActive);
+        setData(filteredData);
+
         setTabCount({
             all: itinerarys.length,
             todo: filterItinerary(itinerarys, 'todo').length,
@@ -59,7 +63,7 @@ function Itinerary() {
             favorite: filterItinerary(itinerarys, 'favorite').length,
             shared: filterItinerary(itinerarys, 'shared').length,
         });
-    }, [itinerarys]);
+    }, [itinerarys, tabActive]);
 
     function handleChangeTab(tab) {
         setTabActive(tab);
