@@ -122,9 +122,12 @@ function ChangeCenter({ position }) {
 function ClickMap() {
     const dispatch = useDispatch();
     const map = useMap(); //配合 mapRef 抓取實例
+    const clickLimit = useSelector((state) => state.maps.clickLimit);
 
-    map.on('click', (e) => {
-        const newPosition = [e.latlng.lat, e.latlng.lng];
-        dispatch(setCurPosition(newPosition));
-    });
+    if (clickLimit) {
+        map.on('click', (e) => {
+            const newPosition = [e.latlng.lat, e.latlng.lng];
+            dispatch(setCurPosition(newPosition));
+        });
+    }
 }

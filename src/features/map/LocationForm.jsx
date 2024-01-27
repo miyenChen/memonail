@@ -12,7 +12,7 @@ import IconButton from '../../ui/IconButton';
 import Alert from '../../ui/Alert';
 import { addLocation } from './locationsSlice';
 import { useNavigate } from 'react-router-dom';
-import { setMapFloatHeight } from './mapsSlice';
+import { setMapFloatHeight, toggleEditPosition } from './mapsSlice';
 
 const StyledLoactionForm = styled(Form)`
     height: 100%;
@@ -42,7 +42,13 @@ function LocationForm() {
 
     useEffect(() => {
         dispatch(setMapFloatHeight('auto'));
-    }, []);
+        dispatch(toggleEditPosition(true));
+
+        // 在組件卸載時切換回無法編輯模式
+        return () => {
+            dispatch(toggleEditPosition(false));
+        };
+    }, [dispatch]);
 
     const handleEditAddress = () => {
         setMode('edit');
@@ -70,6 +76,7 @@ function LocationForm() {
         console.log(newLocation);
 
         dispatch(addLocation(newLocation));
+        dispatch(toggleEditPosition(false));
         navigate('/home');
         // setRating(0);
         // setContent('');

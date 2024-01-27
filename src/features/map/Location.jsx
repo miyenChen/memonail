@@ -7,7 +7,7 @@ import Tag from '../../ui/Tag';
 import Flex from '../../ui/Flex';
 import Button from '../../ui/Button';
 import DisplayMemos from './DisplayMemos';
-import { setCurPosition } from './mapsSlice';
+import { setCurPosition, setMapFloatHeight } from './mapsSlice';
 import { deleteLocation } from './locationsSlice';
 import { deleteLocationsID } from '../memo/memosSlice';
 
@@ -46,6 +46,7 @@ function Location() {
 
     const dispatch = useDispatch();
     dispatch(setCurPosition(position));
+    dispatch(setMapFloatHeight('auto'));
 
     function handleDelete() {
         window.confirm('確認刪除');
