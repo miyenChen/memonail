@@ -73,14 +73,9 @@ function LocationForm() {
 
         const id = uuidv4();
         const newLocation = { id, dateCreated, position, address, rating, content, memosID: [] };
-        console.log(newLocation);
 
         dispatch(addLocation(newLocation));
-        dispatch(toggleEditPosition(false));
         navigate('/home');
-        // setRating(0);
-        // setContent('');
-        // setAddress('');
     }
     return (
         <StyledLoactionForm onSubmit={handleSubmit}>

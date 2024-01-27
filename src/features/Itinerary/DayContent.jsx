@@ -26,8 +26,10 @@ function DayContent({ activeDay, startDate, setSchedules, schedules, setMode }) 
 
     //取得目前編輯日期的地點
     useEffect(() => {
-        const info = schedules.filter((item) => item.day === activeDay);
-        setTimeline(info);
+        if (schedules && schedules.length > 0) {
+            const info = schedules.filter((item) => item.day === activeDay);
+            setTimeline(info);
+        }
     }, [activeDay, schedules]);
 
     //取得單日的日期

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FiCalendar, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -16,7 +16,7 @@ import DayContent from './DayContent';
 import PlanStatus from './PlanStatus';
 import ItineraryLocList from './ItineraryLocList';
 import { setMapFloatHeight } from '../map/mapsSlice';
-import { addItinerary } from './itinerarySlice';
+import { addItinerary, updateItinerary } from './itinerarySlice';
 
 const StyledContainer = styled.div`
     height: 100%;
@@ -58,20 +58,47 @@ const StyledIconBtn = styled(IconButton)`
 `;
 
 function ItineraryInfo() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const data = useSelector((state) => state.itinerarys.itinerarys);
+    const dataType = useSelector((state) => state.itinerarys.dataType);
+
     //edit, loc, show
     const [mode, setMode] = useState('edit');
     const [closeFloat, setCloseFloat] = useState(false);
     const [errorVisible, setErrorVisible] = useState(false);
-    const [title, setTitle] = useState('新行程計畫');
     const [activeDay, setActiveDay] = useState(0);
+    const [title, setTitle] = useState('新行程計畫');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [totalDays, setTotalDays] = useState(1);
     const [schedules, setSchedules] = useState([]);
     const [status, setStatus] = useState('Todo');
+    const [favorite, setFavorite] = useState(false);
+    const [dateCreated, setDateCreated] = useState(new Date().toLocaleDateString());
     const { id } = useParams();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (dataType === 'already') {
+            const match = data.find((item) => item.id === id);
+            const storedStartDate = new Date(match.startDate);
+            const storedEndDate = new Date(match.endDate);
+
+            console.log(match);
+            if (match) {
+                setMode('show');
+                // 如果找到匹配的行程計畫，將相應資料設定到狀態中
+                setTitle(match.title);
+                setStartDate(storedStartDate);
+                setEndDate(storedEndDate);
+                setTotalDays(match.totalDays);
+                setSchedules(match.schedules);
+                setStatus(match.status);
+                setFavorite(match.favorite);
+                setDateCreated(match.dateCreated);
+            }
+        }
+    }, [dataType]);
 
     //讓計算天數即時更新
     useEffect(() => {
@@ -114,7 +141,6 @@ function ItineraryInfo() {
 
     function handleSubmit(e) {
         e.preventDefault();
-
         if (!startDate || !endDate) {
             setErrorVisible(true);
             setTimeout(() => {
@@ -122,32 +148,34 @@ function ItineraryInfo() {
             }, 5000);
             return;
         }
-
-        let dateCreated = new Date();
-        dateCreated = dateCreated.toLocaleDateString();
-
-        const newItinerary = {
+        let newItinerary = {
             id: id,
             status: status,
             title: title,
-            img: '',
             dateCreated: dateCreated,
-            dateStart: startDate.toLocaleDateString(),
-            dateEnd: endDate.toLocaleDateString(),
+            startDate: startDate.toLocaleDateString(),
+            endDate: endDate.toLocaleDateString(),
             totalDays: totalDays,
-            Schedules: schedules,
-            favorite: false,
-            shared: false,
-            member: [],
+            schedules: schedules,
+            favorite: favorite,
         };
-        dispatch(addItinerary(newItinerary));
+        if (dataType === 'new') {
+            dispatch(addItinerary(newItinerary));
+        }
+        if (dataType === 'already') {
+            dispatch(updateItinerary(newItinerary));
+        }
         navigate('/itinerary');
     }
     return (
         <StyledContainer>
             <Flex $justifyC="space-between">
                 <PlanStatus onSetStatus={setStatus} />
-                {mode === 'show' && <Button $size="small">編輯</Button>}
+                {mode === 'show' && (
+                    <Button onClick={() => setMode('edit')} $size="small">
+                        編輯
+                    </Button>
+                )}
                 {mode === 'edit' && (
                     <Button onClick={handleSubmit} $size="small">
                         保存
@@ -171,19 +199,28 @@ function ItineraryInfo() {
             {mode === 'edit' && <Input value={title} onChange={(e) => setTitle(e.target.value)} />}
 
             <Flex>
-                <StyledDatePicker>
-                    <DatePicker
-                        onChange={handleChangeDate}
-                        startDate={startDate}
-                        endDate={endDate}
-                        dateFormat="yyyy/MM/dd"
-                        selectsRange
-                        placeholderText="開始日期 - 結束日期"
-                        isClearable={true}
-                        showIcon
-                        icon={<FiCalendar />}
-                    />
-                </StyledDatePicker>
+                {mode === 'show' && (
+                    <p>
+                        <span>{startDate.toLocaleDateString()}</span>
+                        <span> ~ </span>
+                        <span>{endDate.toLocaleDateString()}</span>
+                    </p>
+                )}
+                {mode === 'edit' && (
+                    <StyledDatePicker>
+                        <DatePicker
+                            onChange={handleChangeDate}
+                            startDate={startDate}
+                            endDate={endDate}
+                            dateFormat="yyyy/MM/dd"
+                            selectsRange
+                            placeholderText="開始日期 - 結束日期"
+                            isClearable={true}
+                            showIcon
+                            icon={<FiCalendar />}
+                        />
+                    </StyledDatePicker>
+                )}
                 <div>總天數：{totalDays}</div>
             </Flex>
 

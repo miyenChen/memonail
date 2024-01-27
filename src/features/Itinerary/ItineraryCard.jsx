@@ -76,8 +76,8 @@ function ItineraryCard({ itinerary, onClick }) {
         id = itinerary.id,
         status = itinerary.status,
         title = itinerary.title,
-        dateStart = itinerary.dateStart,
-        dateEnd = itinerary.dateEnd,
+        startDate = itinerary.startDate,
+        endDate = itinerary.endDate,
         member = itinerary.member,
     } = itinerary;
     const [favorite, setFavorite] = useState(itinerary.favorite);
@@ -109,9 +109,9 @@ function ItineraryCard({ itinerary, onClick }) {
                 <Flex $justifyC="space-between">
                     <StyledInfo>
                         <p>
-                            <span>{dateStart}</span>
+                            <span>{startDate}</span>
                             <span> ~ </span>
-                            <span>{dateEnd}</span>
+                            <span>{endDate}</span>
                         </p>
                         {member && <p>{member}</p>}
                     </StyledInfo>
