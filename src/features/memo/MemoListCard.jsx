@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { FiMapPin, FiImage, FiMap, FiMoreHorizontal } from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
+import { FiMapPin, FiImage, FiMap, FiMoreHorizontal, FiTrash2, FiEdit } from 'react-icons/fi';
 import styled from 'styled-components';
 import IconButton from '../../ui/IconButton';
 import Flex from '../../ui/Flex';
 import TagList from '../../ui/TagList';
 import Tag from '../../ui/Tag';
 import Card from '../../ui/Card';
+import Icon from '../../ui/Icon';
+import { deleteMemo } from './memosSlice';
 
 const StyledMemoList = styled(Card)`
     display: flex;
     align-items: center;
+    position: relative;
 `;
 const TextContainer = styled.div`
     flex: 1;
@@ -61,21 +64,49 @@ const LocationItem = styled.div`
         color: var(--color-red-500);
     }
 `;
+const StyledMenu = styled.ul`
+    position: absolute;
+    right: 0.2rem;
+    top: 4.2rem;
+    border-radius: 0.5rem;
+    background-color: var(--color-gray-100);
+    width: 8rem;
+    z-index: 99;
+`;
+const StyledMenuItem = styled.li`
+    list-style: none;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    gap: 0.25rem;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--color-cyan-500);
+    }
+`;
 
 function MemoListCard({ memo, img = [] }) {
     const {
+        id = memo.id,
         content = memo.content,
         tags = memo.tags,
         dateCreated = memo.dateCreated,
         locationsID = memo.locationsID,
     } = memo;
-
     const data = useSelector((state) => state.locations.locations);
     const [locationNames, setLocationNames] = useState('');
+    const [showCardMenu, setShowCardMenu] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setLocationNames(data.filter((location) => locationsID.includes(location.id)));
     }, [data]);
+
+    function handleDeleteMemo() {
+        dispatch(deleteMemo(id));
+    }
 
     return (
         <StyledMemoList>
@@ -103,9 +134,25 @@ function MemoListCard({ memo, img = [] }) {
                     <IconButton $color="var(--color-cyan-500)" $iconSize="1.2rem">
                         <FiMap />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={() => setShowCardMenu(!showCardMenu)}>
                         <FiMoreHorizontal />
                     </IconButton>
+                    {showCardMenu && (
+                        <StyledMenu>
+                            <StyledMenuItem>
+                                <Icon>
+                                    <FiEdit />
+                                </Icon>
+                                <p>編輯</p>
+                            </StyledMenuItem>
+                            <StyledMenuItem onClick={handleDeleteMemo}>
+                                <Icon>
+                                    <FiTrash2 />
+                                </Icon>
+                                <p>刪除</p>
+                            </StyledMenuItem>
+                        </StyledMenu>
+                    )}
                 </Flex>
                 <ImgContainer>
                     {img.length > 0 ? (

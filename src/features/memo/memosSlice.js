@@ -75,7 +75,11 @@ export const memosSlice = createSlice({
             const newAllTags = useGetAllTags(state.memos);
             state.allTags = newAllTags;
         },
-        deleteMemo() {},
+        deleteMemo(state, action) {
+            const id = action.payload;
+            const newMemos = state.memos.filter((memo) => memo.id !== id);
+            state.memos = newMemos;
+        },
         deleteLocationsID(state, action) {
             const targetID = action.payload;
             const newMemos = state.memos.map((memo) => {
