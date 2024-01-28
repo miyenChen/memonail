@@ -129,8 +129,14 @@ const AddMemo = ({ isOpened = false, onClose }) => {
         let dateCreated = new Date();
         dateCreated = dateCreated.toLocaleDateString();
 
+        const img = imgFiles.map((file) => {
+            const url = URL.createObjectURL(file);
+            const name = file.name;
+            return { url: url, name: name };
+        });
+
         const id = uuidv4();
-        const newMemo = { id, content, locationsID, dateCreated };
+        const newMemo = { id, content, locationsID, dateCreated, img };
         const updateLocations = { id, locationsID };
         dispatch(addMemo(newMemo));
         dispatch(updateMemosID(updateLocations));
