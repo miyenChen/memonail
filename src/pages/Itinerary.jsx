@@ -78,10 +78,7 @@ function Itinerary() {
         dispatch(updateDataType('new'));
         navigate(`/map/itinerary/${id}`);
     }
-    function handleClickCard(id) {
-        dispatch(updateDataType('already'));
-        navigate(`/map/itinerary/${id}`);
-    }
+
     return (
         <StyledItinerary>
             <h2>我的行程</h2>
@@ -101,11 +98,7 @@ function Itinerary() {
                 <CardList $col={4}>
                     <AddCard onClick={() => handleAddItinerary()} />
                     {data.map((itinerary) => (
-                        <ItineraryCard
-                            key={itinerary.id}
-                            itinerary={itinerary}
-                            onClick={() => handleClickCard(itinerary.id)}
-                        />
+                        <ItineraryCard key={itinerary.id} itinerary={itinerary} />
                     ))}
                 </CardList>
             </div>

@@ -7,7 +7,8 @@ import IconButton from '../../ui/IconButton';
 import Card from '../../ui/Card';
 import Flex from '../../ui/Flex';
 import Icon from '../../ui/Icon';
-import { deleteItinerary, updateFavorite } from './itinerarySlice';
+import { deleteItinerary, updateDataType, updateFavorite } from './itinerarySlice';
+import { useNavigate } from 'react-router-dom';
 
 const StyledItineraryCard = styled(Card)`
     display: flex;
@@ -15,6 +16,9 @@ const StyledItineraryCard = styled(Card)`
     justify-content: end;
     position: relative;
 
+    &:hover {
+        cursor: auto;
+    }
     & button {
         position: absolute;
         bottom: 0.75rem;
@@ -30,10 +34,18 @@ const ImgContainer = styled.div`
     overflow: hidden;
     margin-bottom: 0.75rem;
 
+    &:hover {
+        cursor: pointer;
+    }
     & img {
         height: 100%;
         width: 100%;
         object-fit: cover;
+    }
+`;
+const StyledTitle = styled(Flex)`
+    &:hover {
+        cursor: pointer;
     }
 `;
 const StyledStatus = styled.span`
@@ -83,6 +95,7 @@ function ItineraryCard({ itinerary, onClick }) {
     const [favorite, setFavorite] = useState(itinerary.favorite);
     const [showOption, setShowOption] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     function handleFavorite() {
         const newFavorite = !favorite;
@@ -93,19 +106,23 @@ function ItineraryCard({ itinerary, onClick }) {
     function handleDelete() {
         dispatch(deleteItinerary(id));
     }
+    function handleClickCard() {
+        dispatch(updateDataType('already'));
+        navigate(`/map/itinerary/${id}`);
+    }
     return (
         <StyledItineraryCard onClick={onClick}>
-            <ImgContainer>
+            <ImgContainer onClick={handleClickCard}>
                 <img
                     src="https://a0.muscache.com/im/pictures/24abe8fc-4f0d-4de9-b4ca-12d01fcc54d7.jpg?im_w=720"
                     alt=""
                 />
             </ImgContainer>
             <div>
-                <Flex>
+                <StyledTitle onClick={handleClickCard}>
                     <StyledStatus>{status}</StyledStatus>
                     <h3>{title}</h3>
-                </Flex>
+                </StyledTitle>
                 <Flex $justifyC="space-between">
                     <StyledInfo>
                         <p>
