@@ -18,9 +18,10 @@ const StyledLoc = styled.div`
 `;
 const StyledTime = styled.span`
     color: var(--color-amber-500);
+    margin-left: 0.5rem;
     cursor: pointer;
 `;
-function DayContent({ activeDay, startDate, setSchedules, schedules, setMode }) {
+function DayContent({ activeDay, startDate, setSchedules, schedules, setMode, mode }) {
     const [timeline, setTimeline] = useState([]);
     const [date, setDate] = useState('');
 
@@ -53,14 +54,16 @@ function DayContent({ activeDay, startDate, setSchedules, schedules, setMode }) 
     }
 
     function handleTimeClick(index) {
-        const newTime = prompt('請輸入新的時間');
+        if (mode === 'edit') {
+            const newTime = prompt('請輸入新的時間');
 
-        if (newTime) {
-            setSchedules((pre) => {
-                const data = [...pre];
-                data[index] = { ...data[index], time: newTime };
-                return data;
-            });
+            if (newTime) {
+                setSchedules((pre) => {
+                    const data = [...pre];
+                    data[index] = { ...data[index], time: newTime };
+                    return data;
+                });
+            }
         }
     }
 
@@ -84,19 +87,22 @@ function DayContent({ activeDay, startDate, setSchedules, schedules, setMode }) 
                                         {loc.time}
                                     </StyledTime>
                                 </p>
-                                <IconButton onClick={() => handleDeleteLoc(index)}>
-                                    <FiX />
-                                </IconButton>
+                                {mode === 'edit' && (
+                                    <IconButton onClick={() => handleDeleteLoc(index)}>
+                                        <FiX />
+                                    </IconButton>
+                                )}
                             </Flex>
                             <h3>{loc.locInfo.name}</h3>
                             <p>{loc.locInfo.address}</p>
                         </StyledLoc>
                     </div>
                 ))}
-
-            <Button $w100 onClick={() => setMode('loc')}>
-                增加景點
-            </Button>
+            {mode === 'edit' && (
+                <Button $w100 onClick={() => setMode('loc')}>
+                    增加景點
+                </Button>
+            )}
         </StyledDayContent>
     );
 }

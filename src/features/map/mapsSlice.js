@@ -12,7 +12,7 @@ export const mapsSlice = createSlice({
     initialState,
     reducers: {
         updatePositionList(state, action) {
-            state.itineraryPos = action.payload;
+            state.positionList = action.payload;
         },
         setCurPosition(state, action) {
             state.curPosition = action.payload;

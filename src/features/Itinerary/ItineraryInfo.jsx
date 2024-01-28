@@ -18,13 +18,17 @@ import ItineraryLocList from './ItineraryLocList';
 import { setCurPosition, setMapFloatHeight, updatePositionList } from '../map/mapsSlice';
 import { addItinerary, updateItinerary } from './itinerarySlice';
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.main`
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 `;
-
+const StyledHeader = styled.header`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+`;
 const StyledDatePicker = styled.div`
     flex-grow: 1;
 
@@ -63,7 +67,7 @@ function ItineraryInfo() {
     const data = useSelector((state) => state.itinerarys.itinerarys);
     const dataType = useSelector((state) => state.itinerarys.dataType);
 
-    //edit, loc, show
+    //edit, loc, view
     const [mode, setMode] = useState('edit');
     const [closeFloat, setCloseFloat] = useState(false);
     const [errorVisible, setErrorVisible] = useState(false);
@@ -79,17 +83,20 @@ function ItineraryInfo() {
     const { id } = useParams();
 
     useEffect(() => {
+        //點擊已創建的行程時，帶入相關資料
         if (dataType === 'already') {
+            setMode('view');
             const match = data.find((item) => item.id === id);
             const storedStartDate = new Date(match.startDate);
             const storedEndDate = new Date(match.endDate);
             const locPos = match.schedules.map((item) => item.locInfo);
-            setMode('show');
 
-            dispatch(setCurPosition(locPos[0].position));
-            dispatch(updatePositionList(locPos));
+            if (locPos.length > 0) {
+                dispatch(setCurPosition(locPos[0].position));
+                dispatch(updatePositionList(locPos));
+            }
 
-            // 找到匹配的行程計畫，將相應資料設定到狀態中
+            //將相應資料設定到狀態中
             setTitle(match.title);
             setStartDate(storedStartDate);
             setEndDate(storedEndDate);
@@ -99,10 +106,24 @@ function ItineraryInfo() {
             setFavorite(match.favorite);
             setDateCreated(match.dateCreated);
         }
+
         return () => {
             dispatch(updatePositionList([]));
         };
-    }, [dataType]);
+    }, []);
+
+    // 添加地點時，更新 map 座標顯示，並將畫面中心設在第一個地點
+    useEffect(() => {
+        const locList = schedules.map((item) => item.locInfo);
+        if (locList.length > 0) {
+            dispatch(setCurPosition(locList[0].position));
+            dispatch(updatePositionList(locList));
+        }
+
+        return () => {
+            dispatch(updatePositionList([]));
+        };
+    }, [schedules]);
 
     //讓計算天數即時更新
     useEffect(() => {
@@ -165,102 +186,107 @@ function ItineraryInfo() {
         };
         if (dataType === 'new') {
             dispatch(addItinerary(newItinerary));
+            navigate('/itinerary');
         }
         if (dataType === 'already') {
             dispatch(updateItinerary(newItinerary));
+            setMode('view');
         }
-        navigate('/itinerary');
     }
     return (
         <StyledContainer>
-            <Flex $justifyC="space-between">
-                <PlanStatus onSetStatus={setStatus} />
-                {mode === 'show' && (
-                    <Button onClick={() => setMode('edit')} $size="small">
-                        編輯
-                    </Button>
-                )}
-                {mode === 'edit' && (
-                    <Button onClick={handleSubmit} $size="small">
-                        保存
-                    </Button>
+            <StyledHeader>
+                <Flex $justifyC="space-between">
+                    <PlanStatus onSetStatus={setStatus} />
+                    {mode === 'view' && (
+                        <Button onClick={() => setMode('edit')} $size="small">
+                            編輯
+                        </Button>
+                    )}
+                    {mode === 'edit' && (
+                        <Button onClick={handleSubmit} $size="small">
+                            保存
+                        </Button>
+                    )}
+
+                    {/* 控制浮窗高度 */}
+                    {closeFloat ? (
+                        <StyledIconBtn onClick={handleFloatHeight}>
+                            <FiChevronUp />
+                        </StyledIconBtn>
+                    ) : (
+                        <StyledIconBtn onClick={handleFloatHeight}>
+                            <FiChevronDown />
+                        </StyledIconBtn>
+                    )}
+                </Flex>
+                {errorVisible && <Alert $variation="error">請選擇行程日期</Alert>}
+
+                {mode === 'view' && <h1>{title}</h1>}
+                {mode !== 'view' && (
+                    <Input value={title} onChange={(e) => setTitle(e.target.value)} />
                 )}
 
-                {/* 控制浮窗高度 */}
-                {closeFloat ? (
-                    <StyledIconBtn onClick={handleFloatHeight}>
-                        <FiChevronUp />
-                    </StyledIconBtn>
-                ) : (
-                    <StyledIconBtn onClick={handleFloatHeight}>
-                        <FiChevronDown />
-                    </StyledIconBtn>
-                )}
-            </Flex>
-            {errorVisible && <Alert $variation="error">請選擇行程日期</Alert>}
-
-            {mode === 'show' && <h1>{title}</h1>}
-            {mode === 'edit' && <Input value={title} onChange={(e) => setTitle(e.target.value)} />}
-
-            <Flex>
-                {mode === 'show' && (
-                    <p>
-                        <span>{startDate.toLocaleDateString()}</span>
-                        <span> ~ </span>
-                        <span>{endDate.toLocaleDateString()}</span>
-                    </p>
-                )}
-                {mode === 'edit' && (
-                    <StyledDatePicker>
-                        <DatePicker
-                            onChange={handleChangeDate}
-                            startDate={startDate}
-                            endDate={endDate}
-                            dateFormat="yyyy/MM/dd"
-                            selectsRange
-                            placeholderText="開始日期 - 結束日期"
-                            isClearable={true}
-                            showIcon
-                            icon={<FiCalendar />}
+                <Flex>
+                    {mode === 'view' && (
+                        <p>
+                            <span>{startDate.toLocaleDateString()}</span>
+                            <span> ~ </span>
+                            <span>{endDate.toLocaleDateString()}</span>
+                        </p>
+                    )}
+                    {mode !== 'view' && (
+                        <StyledDatePicker>
+                            <DatePicker
+                                onChange={handleChangeDate}
+                                startDate={startDate}
+                                endDate={endDate}
+                                dateFormat="yyyy/MM/dd"
+                                selectsRange
+                                placeholderText="開始日期 - 結束日期"
+                                isClearable={true}
+                                showIcon
+                                icon={<FiCalendar />}
+                            />
+                        </StyledDatePicker>
+                    )}
+                    <div>總天數：{totalDays}</div>
+                </Flex>
+            </StyledHeader>
+            {!closeFloat && (
+                <StyledContent>
+                    {mode === 'loc' ? (
+                        <ItineraryLocList
+                            activeDay={activeDay}
+                            setSchedules={setSchedules}
+                            onSetMode={setMode}
                         />
-                    </StyledDatePicker>
-                )}
-                <div>總天數：{totalDays}</div>
-            </Flex>
-
-            {!closeFloat && mode === 'edit' && (
-                <StyledContent>
-                    <TagList>
-                        {totalDays ? (
-                            Array.from({ length: totalDays }, (_, index) => (
-                                <Tag
-                                    key={index}
-                                    className={activeDay === index ? 'active' : ''}
-                                    onClick={() => setActiveDay(index)}>
-                                    DAY {index + 1}
-                                </Tag>
-                            ))
-                        ) : (
-                            <p>請先選擇日期</p>
-                        )}
-                    </TagList>
-                    <DayContent
-                        activeDay={activeDay}
-                        startDate={startDate}
-                        schedules={schedules}
-                        setSchedules={setSchedules}
-                        setMode={setMode}
-                    />
-                </StyledContent>
-            )}
-
-            {!closeFloat && mode === 'loc' && (
-                <StyledContent>
-                    <ItineraryLocList
-                        activeDay={activeDay}
-                        setSchedules={setSchedules}
-                        onSetMode={setMode}
-                    />
+                    ) : (
+                        <>
+                            <TagList>
+                                {totalDays ? (
+                                    Array.from({ length: totalDays }, (_, index) => (
+                                        <Tag
+                                            key={index}
+                                            className={activeDay === index ? 'active' : ''}
+                                            onClick={() => setActiveDay(index)}>
+                                            DAY {index + 1}
+                                        </Tag>
+                                    ))
+                                ) : (
+                                    <p>請先選擇日期</p>
+                                )}
+                            </TagList>
+                            <DayContent
+                                activeDay={activeDay}
+                                startDate={startDate}
+                                schedules={schedules}
+                                setSchedules={setSchedules}
+                                setMode={setMode}
+                                mode={mode}
+                            />
+                        </>
+                    )}
                 </StyledContent>
             )}
         </StyledContainer>
