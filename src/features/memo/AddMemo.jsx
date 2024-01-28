@@ -140,7 +140,7 @@ const AddMemo = ({ isOpened = false, onClose }) => {
         const updateLocations = { id, locationsID };
         dispatch(addMemo(newMemo));
         dispatch(updateMemosID(updateLocations));
-        console.log(newMemo);
+
         onClose(!isOpened);
         setContent('');
         setImgFiles([]);

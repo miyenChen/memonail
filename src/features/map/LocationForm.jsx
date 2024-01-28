@@ -43,12 +43,13 @@ function LocationForm() {
     useEffect(() => {
         dispatch(setMapFloatHeight('auto'));
         dispatch(toggleEditPosition(true));
+        setAddress(apiAddress);
 
         // 在組件卸載時切換回無法編輯模式
         return () => {
             dispatch(toggleEditPosition(false));
         };
-    }, [dispatch]);
+    }, [dispatch, apiAddress]);
 
     const handleEditAddress = () => {
         setMode('edit');
