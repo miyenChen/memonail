@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useRef } from 'react';
@@ -61,6 +61,7 @@ function Map() {
     const mapRef = useRef(null);
     const curPosition = useSelector((state) => state.maps.curPosition);
     const mapFloatHeight = useSelector((state) => state.maps.mapFloatHeight);
+    const positionList = useSelector((state) => state.maps.positionList);
 
     //限制地圖邊界
     function MapBounds() {
@@ -98,9 +99,21 @@ function Map() {
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
                         />
-                        <Marker position={curPosition} />
+                        {positionList &&
+                            positionList.map((pos) => (
+                                <Marker position={pos.position} key={pos.id}>
+                                    <Popup>
+                                        <span>{pos.name}</span>
+                                    </Popup>
+                                </Marker>
+                            ))}
+                        {curPosition && (
+                            <>
+                                <Marker position={curPosition} />
+                                <ChangeCenter position={curPosition} />
+                            </>
+                        )}
                         <MapBounds />
-                        <ChangeCenter position={curPosition} />
                         <ClickMap />
                     </MapContainer>
                 </StyledMap>

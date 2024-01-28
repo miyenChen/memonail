@@ -81,7 +81,6 @@ function DayContent({ activeDay, startDate, setSchedules, schedules, setMode }) 
                                 <p>
                                     預計時間
                                     <StyledTime onClick={() => handleTimeClick(index)}>
-                                        {' '}
                                         {loc.time}
                                     </StyledTime>
                                 </p>

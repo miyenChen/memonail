@@ -15,7 +15,7 @@ import Alert from '../../ui/Alert';
 import DayContent from './DayContent';
 import PlanStatus from './PlanStatus';
 import ItineraryLocList from './ItineraryLocList';
-import { setMapFloatHeight } from '../map/mapsSlice';
+import { setCurPosition, setMapFloatHeight, updatePositionList } from '../map/mapsSlice';
 import { addItinerary, updateItinerary } from './itinerarySlice';
 
 const StyledContainer = styled.div`
@@ -83,21 +83,25 @@ function ItineraryInfo() {
             const match = data.find((item) => item.id === id);
             const storedStartDate = new Date(match.startDate);
             const storedEndDate = new Date(match.endDate);
+            const locPos = match.schedules.map((item) => item.locInfo);
+            setMode('show');
 
-            console.log(match);
-            if (match) {
-                setMode('show');
-                // 如果找到匹配的行程計畫，將相應資料設定到狀態中
-                setTitle(match.title);
-                setStartDate(storedStartDate);
-                setEndDate(storedEndDate);
-                setTotalDays(match.totalDays);
-                setSchedules(match.schedules);
-                setStatus(match.status);
-                setFavorite(match.favorite);
-                setDateCreated(match.dateCreated);
-            }
+            dispatch(setCurPosition(locPos[0].position));
+            dispatch(updatePositionList(locPos));
+
+            // 找到匹配的行程計畫，將相應資料設定到狀態中
+            setTitle(match.title);
+            setStartDate(storedStartDate);
+            setEndDate(storedEndDate);
+            setTotalDays(match.totalDays);
+            setSchedules(match.schedules);
+            setStatus(match.status);
+            setFavorite(match.favorite);
+            setDateCreated(match.dateCreated);
         }
+        return () => {
+            dispatch(updatePositionList([]));
+        };
     }, [dataType]);
 
     //讓計算天數即時更新
