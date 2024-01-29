@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { addMemo } from './memosSlice';
+import { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMemo, updateMemo } from './memosSlice';
 import { updateMemosID } from '../map/locationsSlice';
 import { v4 as uuidv4 } from 'uuid';
 import { FiImage, FiMapPin, FiX } from 'react-icons/fi';
@@ -70,8 +70,9 @@ const ImgListItem = styled.li`
     }
 `;
 
-const AddMemo = ({ isOpened = false, onClose }) => {
+const AddMemo = ({ isOpened = false, onClose, memo }) => {
     const fileInputRef = useRef(null);
+    const loc = useSelector((state) => state.locations.locations);
     const [content, setContent] = useState('');
     const [imgFiles, setImgFiles] = useState([]);
     const [locationsID, setLocationsID] = useState([]);
@@ -80,6 +81,24 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     const [selectedLoc, setSelectedLoc] = useState([]);
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (memo) {
+            const { text = memo.content, img = memo.img, locID = memo.locationsID } = memo;
+            /* 由於 selectedLoc 是包含詳細地點資訊的array
+             * locationsID 是只有id的array，因此要找回對應資料帶入
+             */
+            const locsInfo = loc.filter((loc) => locID.includes(loc.id));
+
+            setSelectedLoc(locsInfo);
+            setLocationsID(locID);
+            setContent(text);
+
+            if (Array.isArray(img)) {
+                setImgFiles(img);
+            }
+        }
+    }, [memo]);
 
     function handleReturnPrimary() {
         setStep('primary');
@@ -90,9 +109,12 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     }
     function handleFileChange(e) {
         const files = e.target.files;
+
         if (files.length > 0) {
             const newFile = files[0];
-            setImgFiles((img) => [...img, newFile]);
+            const newImg = { url: URL.createObjectURL(newFile), name: newFile.name };
+            const data = [...imgFiles, newImg];
+            setImgFiles(data);
         }
     }
     function handleContent(e) {
@@ -113,6 +135,9 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     function handleLocDelete(index) {
         const newLoc = selectedLoc.filter((_, i) => i !== index);
         setSelectedLoc(newLoc);
+
+        const saveID = newLoc.map((item) => item.id);
+        setLocationsID(saveID);
     }
     function handleImgDelete(index) {
         const updatedFiles = imgFiles.filter((_, i) => i !== index);
@@ -126,21 +151,19 @@ const AddMemo = ({ isOpened = false, onClose }) => {
     }
     function handleSubmit(e) {
         e.preventDefault();
-        let dateCreated = new Date();
-        dateCreated = dateCreated.toLocaleDateString();
+        if (memo) {
+            const newData = { id: memo.id, content, locationsID, img: imgFiles };
+            dispatch(updateMemo(newData));
+        } else {
+            let dateCreated = new Date();
+            dateCreated = dateCreated.toLocaleDateString();
 
-        const img = imgFiles.map((file) => {
-            const url = URL.createObjectURL(file);
-            const name = file.name;
-            return { url: url, name: name };
-        });
-
-        const id = uuidv4();
-        const newMemo = { id, content, locationsID, dateCreated, img };
-        const updateLocations = { id, locationsID };
-        dispatch(addMemo(newMemo));
-        dispatch(updateMemosID(updateLocations));
-
+            const id = uuidv4();
+            const newMemo = { id, content, locationsID, dateCreated, img: imgFiles };
+            const updateLocations = { id, locationsID };
+            dispatch(addMemo(newMemo));
+            dispatch(updateMemosID(updateLocations));
+        }
         onClose(!isOpened);
         setContent('');
         setImgFiles([]);
@@ -186,7 +209,7 @@ const AddMemo = ({ isOpened = false, onClose }) => {
                                         ))}
                                     </div>
                                 )}
-                                {imgFiles.length > 0 && (
+                                {imgFiles && imgFiles.length > 0 && (
                                     <BorderContainer>
                                         <ImgList>
                                             {imgFiles.map((file, index) => (
@@ -198,7 +221,7 @@ const AddMemo = ({ isOpened = false, onClose }) => {
                                                     </IconButton>
                                                     <img
                                                         width="100%"
-                                                        src={URL.createObjectURL(file)}
+                                                        src={file.url}
                                                         alt={`Uploaded ${index + 1}`}
                                                     />
                                                 </ImgListItem>

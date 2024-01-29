@@ -12,6 +12,7 @@ const Overlay = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 98;
 `;
 const StyledDialog = styled.dialog`
     position: fixed;
@@ -22,6 +23,7 @@ const StyledDialog = styled.dialog`
     background-color: var(--color-none);
     border: none;
     width: ${(props) => props.$width};
+    z-index: 99;
 `;
 const Container = styled.div`
     position: relative;

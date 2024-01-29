@@ -9,6 +9,7 @@ import Tag from '../../ui/Tag';
 import Card from '../../ui/Card';
 import Icon from '../../ui/Icon';
 import { deleteMemo } from './memosSlice';
+import AddMemo from './AddMemo';
 
 const StyledMemoList = styled(Card)`
     display: flex;
@@ -98,16 +99,20 @@ function MemoListCard({ memo, img = [] }) {
     const data = useSelector((state) => state.locations.locations);
     const [locationNames, setLocationNames] = useState('');
     const [showCardMenu, setShowCardMenu] = useState(false);
+    const [openEditMemo, setOpenEditMemo] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
         setLocationNames(data.filter((location) => locationsID.includes(location.id)));
-    }, [data]);
+    }, [memo]);
 
     function handleDeleteMemo() {
         dispatch(deleteMemo(id));
     }
-
+    function handleOpenEditMemo() {
+        setShowCardMenu(false);
+        setOpenEditMemo(true);
+    }
     return (
         <StyledMemoList>
             <TextContainer>
@@ -139,7 +144,7 @@ function MemoListCard({ memo, img = [] }) {
                     </IconButton>
                     {showCardMenu && (
                         <StyledMenu>
-                            <StyledMenuItem>
+                            <StyledMenuItem onClick={handleOpenEditMemo}>
                                 <Icon>
                                     <FiEdit />
                                 </Icon>
@@ -162,6 +167,9 @@ function MemoListCard({ memo, img = [] }) {
                     )}
                 </ImgContainer>
             </div>
+            {openEditMemo && (
+                <AddMemo isOpened={openEditMemo} onClose={setOpenEditMemo} memo={memo} />
+            )}
         </StyledMemoList>
     );
 }

@@ -80,6 +80,26 @@ export const memosSlice = createSlice({
             const newMemos = state.memos.filter((memo) => memo.id !== id);
             state.memos = newMemos;
         },
+        updateMemo(state, action) {
+            const { id, content, locationsID, img } = action.payload;
+
+            const data = useTagExtraction(content);
+            const { text, tags } = data;
+            const sortedTags = useSortTags(tags);
+
+            const newMemo = state.memos.map((memo) =>
+                memo.id === id
+                    ? {
+                          ...memo,
+                          content: text,
+                          tags: sortedTags,
+                          locationsID: locationsID,
+                          img: img,
+                      }
+                    : memo
+            );
+            return { ...state, memos: newMemo };
+        },
         deleteLocationsID(state, action) {
             const targetID = action.payload;
             const newMemos = state.memos.map((memo) => {
@@ -94,6 +114,6 @@ export const memosSlice = createSlice({
     },
 });
 
-export const { addMemo, deleteMemo, deleteLocationsID } = memosSlice.actions;
+export const { addMemo, deleteMemo, updateMemo, deleteLocationsID } = memosSlice.actions;
 
 export default memosSlice.reducer;
