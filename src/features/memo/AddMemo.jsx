@@ -259,7 +259,7 @@ const AddMemo = ({ isOpened = false, onClose, memo }) => {
                                 />
                             </BorderContainer>
                             <Button type="submit" $w100>
-                                新增
+                                {memo ? '更新筆記' : '新增'}
                             </Button>
                         </>
                     )}

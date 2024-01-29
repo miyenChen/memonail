@@ -79,6 +79,9 @@ export const memosSlice = createSlice({
             const id = action.payload;
             const newMemos = state.memos.filter((memo) => memo.id !== id);
             state.memos = newMemos;
+
+            const newAllTags = useGetAllTags(state.memos);
+            state.allTags = newAllTags;
         },
         updateMemo(state, action) {
             const { id, content, locationsID, img } = action.payload;
@@ -87,7 +90,7 @@ export const memosSlice = createSlice({
             const { text, tags } = data;
             const sortedTags = useSortTags(tags);
 
-            const newMemo = state.memos.map((memo) =>
+            const newMemos = state.memos.map((memo) =>
                 memo.id === id
                     ? {
                           ...memo,
@@ -98,7 +101,10 @@ export const memosSlice = createSlice({
                       }
                     : memo
             );
-            return { ...state, memos: newMemo };
+            state.memos = newMemos;
+
+            const newAllTags = useGetAllTags(state.memos);
+            state.allTags = newAllTags;
         },
         deleteLocationsID(state, action) {
             const targetID = action.payload;

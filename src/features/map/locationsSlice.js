@@ -72,6 +72,10 @@ export const locationsSlice = createSlice({
         deleteLocation(state, action) {
             const newArray = state.locations.filter((item) => item.id !== action.payload);
             state.locations = newArray;
+
+            //從更新後的 locations 取得新的 allTags 並替換
+            const newAllTags = useGetAllTags(state.locations);
+            state.allTags = newAllTags;
         },
         updateLocation(state, action) {
             const { id, position, address, rating, content } = action.payload;
@@ -80,7 +84,7 @@ export const locationsSlice = createSlice({
             const { text, tags } = data;
             const sortedTags = useSortTags(tags);
 
-            const newLoc = state.locations.map((loc) =>
+            const newLocs = state.locations.map((loc) =>
                 loc.id === id
                     ? {
                           ...loc,
@@ -93,7 +97,11 @@ export const locationsSlice = createSlice({
                       }
                     : loc
             );
-            return { ...state, locations: newLoc };
+            state.locations = newLocs;
+
+            //從更新後的 locations 取得新的 allTags 並替換
+            const newAllTags = useGetAllTags(state.locations);
+            state.allTags = newAllTags;
         },
         updateMemosID(state, action) {
             //payload 結構 {memos.id, locations:[{locations.id,locations.name},{//其他被選的地點}]}
