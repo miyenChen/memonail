@@ -13,7 +13,6 @@ import Profile from './features/setting/Profile';
 import Account from './features/setting/Account';
 import Map from './features/map/Map';
 import LocationForm from './features/map/LocationForm';
-import Location from './features/map/Location';
 import ItineraryInfo from './features/itinerary/ItineraryInfo';
 
 function App() {
@@ -41,7 +40,6 @@ function App() {
                     <Route path="map" element={<Map />}>
                         <Route index element={<Navigate to="location" replace />} />
                         <Route path="location" element={<LocationForm />} />
-                        <Route path="location/:id" element={<Location />} />
                         <Route path="itinerary/:id" element={<ItineraryInfo />} />
                     </Route>
                 </Routes>

@@ -8,6 +8,8 @@ import Flex from '../../ui/Flex';
 import Card from '../../ui/Card';
 import IconButton from '../../ui/IconButton';
 import DisplayMemos from './DisplayMemos';
+import { useDispatch } from 'react-redux';
+import { updateCurLocID } from './locationsSlice';
 
 const StyledCard = styled(Card)`
     display: flex;
@@ -34,6 +36,7 @@ const TagContainer = styled(TagList)`
 
 function LocationListCard({ location, onClick, selected, $border }) {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const {
         id = location.id,
         name = location.name,
@@ -42,6 +45,12 @@ function LocationListCard({ location, onClick, selected, $border }) {
         links = location.memosID,
     } = location;
 
+    function handleMap(e) {
+        e.preventDefault();
+
+        dispatch(updateCurLocID(id));
+        navigate(`/map/location`);
+    }
     return (
         <StyledCard onClick={onClick} $selected={selected} $border={$border}>
             <TagContainer>
@@ -52,13 +61,7 @@ function LocationListCard({ location, onClick, selected, $border }) {
             <h3>{name}</h3>
             <Flex $justifyC="space-between">
                 <Rating defaultRating={rating} />
-                <IconButton
-                    $color="var(--color-amber-500)"
-                    $iconSize="1.2rem"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        navigate(`/map/location/${id}`);
-                    }}>
+                <IconButton $color="var(--color-amber-500)" $iconSize="1.2rem" onClick={handleMap}>
                     <FiMap />
                 </IconButton>
             </Flex>

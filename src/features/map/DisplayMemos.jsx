@@ -54,7 +54,7 @@ function DisplayMemos({ links }) {
 
     useEffect(() => {
         setLinkedMemos(memos.filter((memo) => links.includes(memo.id)));
-    }, []);
+    }, [links]);
 
     function handleShowedMemos() {
         setShowMemos(!showMemos);

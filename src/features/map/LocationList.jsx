@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import AddCard from '../../ui/AddCard';
 import CardList from '../../ui/CardList';
 import AllTagsList from '../../ui/AllTagsList';
 import LocationListCard from './LocationListCard';
+import { updateCurLocID, updateLocEditMode } from './locationsSlice';
 
 function LocationList() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const allTags = useSelector((state) => state.locations.allTags);
     const locations = useSelector((state) => state.locations.locations);
 
@@ -19,6 +22,9 @@ function LocationList() {
             : locations.filter((location) => location.tags.includes(selected));
 
     function handleAddLocation() {
+        const newID = uuidv4();
+        dispatch(updateCurLocID(newID));
+        dispatch(updateLocEditMode('add'));
         navigate('/map/location');
     }
 

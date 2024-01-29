@@ -11,6 +11,7 @@ const demoLoctions = [
         address: '',
         rating: 2,
         tags: ['coffee'],
+        content: '#coffee 台北',
         memosID: ['456', '123'],
     },
     {
@@ -20,6 +21,7 @@ const demoLoctions = [
         address: '',
         rating: 4,
         tags: ['未分類'],
+        content: '擎天崗',
         memosID: ['123'],
     },
     {
@@ -29,12 +31,18 @@ const demoLoctions = [
         address: '',
         rating: 3,
         tags: ['restaurant'],
+        content: '#restaurant 石三鍋-綠島店',
         memosID: [],
     },
 ];
 
 const allTags = useGetAllTags(demoLoctions);
-const initialState = { 'locations': demoLoctions, 'allTags': allTags };
+const initialState = {
+    locations: demoLoctions,
+    allTags: allTags,
+    curLocID: '',
+    locEditMode: 'add',
+};
 
 export const locationsSlice = createSlice({
     name: 'locations',
@@ -45,13 +53,14 @@ export const locationsSlice = createSlice({
 
             //將content分離成標籤和文字，並將標籤排序
             const data = useTagExtraction(content);
-            const { newContent = data.text, tags = data.tags } = data;
+            const { text, tags } = data;
             const sortedTags = useSortTags(tags);
 
             //將處理後的內容儲存到狀態中
             const location = {
-                name: newContent,
+                name: text,
                 tags: sortedTags,
+                content: action.payload.content,
                 ...rest,
             };
             state.locations.push(location);
@@ -63,6 +72,28 @@ export const locationsSlice = createSlice({
         deleteLocation(state, action) {
             const newArray = state.locations.filter((item) => item.id !== action.payload);
             state.locations = newArray;
+        },
+        updateLocation(state, action) {
+            const { id, position, address, rating, content } = action.payload;
+            //將更新的content分離成name和tags
+            const data = useTagExtraction(content);
+            const { text, tags } = data;
+            const sortedTags = useSortTags(tags);
+
+            const newLoc = state.locations.map((loc) =>
+                loc.id === id
+                    ? {
+                          ...loc,
+                          name: text,
+                          tags: sortedTags,
+                          content: content,
+                          position: position,
+                          address: address,
+                          rating: rating,
+                      }
+                    : loc
+            );
+            return { ...state, locations: newLoc };
         },
         updateMemosID(state, action) {
             //payload 結構 {memos.id, locations:[{locations.id,locations.name},{//其他被選的地點}]}
@@ -76,9 +107,30 @@ export const locationsSlice = createSlice({
                 }
             });
         },
+        updateCurLocID(state, action) {
+            return { ...state, curLocID: action.payload };
+        },
+        updateLocEditMode(state, action) {
+            if (
+                action.payload === 'add' ||
+                action.payload === 'edit' ||
+                action.payload === 'view'
+            ) {
+                state.locEditMode = action.payload;
+            } else {
+                throw new Error('updateDataType 請傳入 add / edit / view');
+            }
+        },
     },
 });
 
-export const { addLocation, deleteLocation, updateMemosID } = locationsSlice.actions;
+export const {
+    addLocation,
+    deleteLocation,
+    updateLocation,
+    updateMemosID,
+    updateCurLocID,
+    updateLocEditMode,
+} = locationsSlice.actions;
 
 export default locationsSlice.reducer;

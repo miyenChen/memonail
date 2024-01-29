@@ -5,7 +5,7 @@ const Input = styled.input`
     border-radius: 0.25rem;
     padding: 0.5rem;
 
-    ${(props) => (props.$f100 ? 'flex: 1 0 0;' : '')}
+    font-size: ${(props) => props.$fz || ''};
     ${(props) => (props.$w100 ? 'width:100%;' : '')}
 
     &::placeholder {
