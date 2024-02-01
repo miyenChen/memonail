@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurPosition } from './mapsSlice';
 import { Outlet } from 'react-router-dom';
@@ -137,10 +137,22 @@ function ClickMap() {
     const map = useMap(); //配合 mapRef 抓取實例
     const clickLimit = useSelector((state) => state.maps.clickLimit);
 
-    if (clickLimit) {
-        map.on('click', (e) => {
+    useEffect(() => {
+        const handleMapClick = (e) => {
             const newPosition = [e.latlng.lat, e.latlng.lng];
             dispatch(setCurPosition(newPosition));
-        });
-    }
+        };
+
+        if (clickLimit) {
+            map.on('click', handleMapClick);
+        } else {
+            // 如果 clickLimit 變為 false，則移除事件監聽
+            map.off('click', handleMapClick);
+        }
+
+        // 在組件卸載時清理事件監聽
+        return () => {
+            map.off('click', handleMapClick);
+        };
+    }, [clickLimit]);
 }

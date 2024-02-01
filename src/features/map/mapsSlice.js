@@ -21,12 +21,12 @@ export const mapsSlice = createSlice({
             state.mapFloatHeight = action.payload;
         },
 
-        toggleEditPosition(state, action) {
+        toggleClickLimit(state, action) {
             state.clickLimit = action.payload;
         },
     },
 });
 
-export const { updatePositionList, setCurPosition, setMapFloatHeight, toggleEditPosition } =
+export const { updatePositionList, setCurPosition, setMapFloatHeight, toggleClickLimit } =
     mapsSlice.actions;
 export default mapsSlice.reducer;

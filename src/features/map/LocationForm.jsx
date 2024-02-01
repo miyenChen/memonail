@@ -12,7 +12,7 @@ import Alert from '../../ui/Alert';
 import Flex from '../../ui/Flex';
 import TagList from '../../ui/TagList';
 import Tag from '../../ui/Tag';
-import { setMapFloatHeight, toggleEditPosition } from './mapsSlice';
+import { setMapFloatHeight, toggleClickLimit } from './mapsSlice';
 import { addLocation, updateLocEditMode, updateLocation } from './locationsSlice';
 import DisplayMemos from './DisplayMemos';
 
@@ -49,6 +49,7 @@ function LocationForm() {
     const locData = useSelector((state) => state.locations.locations);
     const locEditMode = useSelector((state) => state.locations.locEditMode);
     const position = useSelector((state) => state.maps.curPosition);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const apiAddress = useReverseGeocode();
@@ -64,6 +65,7 @@ function LocationForm() {
     const [tags, setTags] = useState([]);
     const [links, setLinks] = useState([]);
 
+    //初次進到地點的地圖畫面，依據id確認是否要載入資料，及自動設定模式、視窗高度
     useEffect(() => {
         const loc = locData.find((data) => data.id === id);
         if (loc) {
@@ -84,22 +86,29 @@ function LocationForm() {
             setLinks(locLinks);
 
             dispatch(updateLocEditMode('view'));
+        } else {
+            dispatch(updateLocEditMode('add'));
         }
 
         dispatch(setMapFloatHeight('auto'));
-        setAddress(apiAddress);
     }, [locData, id]);
 
+    //點擊地圖座標更改同時重新設定api轉化的新地址到 "儲存的地址"
     useEffect(() => {
-        if (locEditMode !== 'view') {
-            dispatch(toggleEditPosition(false));
+        setAddress(apiAddress);
+    }, [apiAddress]);
+
+    //依據目前模式限制地圖的點擊更換座標功能
+    useEffect(() => {
+        if (locEditMode === 'view') {
+            dispatch(toggleClickLimit(false));
         } else {
-            dispatch(toggleEditPosition(true));
+            dispatch(toggleClickLimit(true));
         }
 
         // 在組件卸載時切換回無法編輯模式
         return () => {
-            dispatch(toggleEditPosition(false));
+            dispatch(toggleClickLimit(false));
         };
     }, [locEditMode]);
 
@@ -108,6 +117,7 @@ function LocationForm() {
         //複製當前位置的地址：如果之前有更改過地址，會造成先前地址與當前位置的地址不同步
         setAddress(apiAddress);
     };
+
     const handleUpdateAddress = () => {
         setAddressMode('view');
     };
@@ -115,6 +125,7 @@ function LocationForm() {
     const handleAddressChange = (e) => {
         setAddress(e.target.value);
     };
+
     function handleDelete() {
         const confirmed = window.confirm('確認刪除');
         if (confirmed) {
@@ -129,11 +140,14 @@ function LocationForm() {
         }
     }
 
+    //編輯(edit)模式，更新資料，dateCreated,memosID沿用原本內容
     function handleUpdateLoc() {
         const newData = { id, position, address, rating, content };
 
         dispatch(updateLocation(newData));
     }
+
+    //添加(add)模式，新增資料
     function handleSubmit(e) {
         e.preventDefault();
         if (!content) {

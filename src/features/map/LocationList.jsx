@@ -6,7 +6,7 @@ import AddCard from '../../ui/AddCard';
 import CardList from '../../ui/CardList';
 import AllTagsList from '../../ui/AllTagsList';
 import LocationListCard from './LocationListCard';
-import { updateCurLocID, updateLocEditMode } from './locationsSlice';
+import { updateCurLocID } from './locationsSlice';
 
 function LocationList() {
     const navigate = useNavigate();
@@ -24,7 +24,6 @@ function LocationList() {
     function handleAddLocation() {
         const newID = uuidv4();
         dispatch(updateCurLocID(newID));
-        dispatch(updateLocEditMode('add'));
         navigate('/map/location');
     }
 

@@ -47,7 +47,6 @@ function LocationListCard({ location, onClick, selected, $border }) {
 
     function handleMap(e) {
         e.preventDefault();
-
         dispatch(updateCurLocID(id));
         navigate(`/map/location`);
     }
