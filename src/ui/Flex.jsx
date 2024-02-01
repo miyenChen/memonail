@@ -8,5 +8,6 @@ const Flex = styled.div`
     justify-content: ${(props) => (props.$justifyC ? props.$justifyC : '')};
     padding: ${(props) => props.$padding || ''};
     margin: ${(props) => props.$margin || ''};
+    width: ${(props) => props.$width || ''};
 `;
 export default Flex;

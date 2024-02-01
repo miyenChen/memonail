@@ -6,6 +6,8 @@ const CardList = styled.ul.attrs((props) => {
 })`
     display: grid;
     gap: 0.5rem;
+    ${(props) => (props.$w100 ? 'width:100%;' : '')}
+
     grid-template-columns: repeat(${(props) => Math.min(props.$col, 1)}, 1fr);
 
     @media screen and (min-width: 768px) {

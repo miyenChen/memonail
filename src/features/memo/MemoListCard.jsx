@@ -15,6 +15,9 @@ const StyledMemoList = styled(Card)`
     display: flex;
     align-items: center;
     position: relative;
+    &:hover {
+        cursor: auto;
+    }
 `;
 const TextContainer = styled.div`
     flex: 1;
@@ -32,6 +35,7 @@ const TextContainer = styled.div`
 const TagContainer = styled(TagList)`
     margin: 0.25rem 0 0.5rem;
     & li {
+        cursor: auto;
         color: var(--color-amber-400);
         border-color: var(--color-amber-400);
     }
@@ -67,11 +71,11 @@ const LocationItem = styled.div`
 `;
 const StyledMenu = styled.ul`
     position: absolute;
-    right: 0.2rem;
-    top: 4.2rem;
+    right: -1.5rem;
+    top: 2.2rem;
     border-radius: 0.5rem;
     background-color: var(--color-gray-100);
-    width: 8rem;
+    width: 6rem;
     z-index: 99;
 `;
 const StyledMenuItem = styled.li`
@@ -85,6 +89,10 @@ const StyledMenuItem = styled.li`
 
     &:hover {
         color: var(--color-cyan-500);
+    }
+    & svg {
+        width: 0.875rem;
+        height: 0.875rem;
     }
 `;
 
@@ -135,29 +143,26 @@ function MemoListCard({ memo, img = [] }) {
                 )}
             </TextContainer>
             <div>
-                <Flex>
-                    <IconButton $color="var(--color-cyan-500)" $iconSize="1.2rem">
-                        <FiMap />
-                    </IconButton>
-                    <IconButton onClick={() => setShowCardMenu(!showCardMenu)}>
+                <Flex $justifyC="center">
+                    <IconButton $position="relative" onClick={() => setShowCardMenu(!showCardMenu)}>
                         <FiMoreHorizontal />
+                        {showCardMenu && (
+                            <StyledMenu>
+                                <StyledMenuItem onClick={handleOpenEditMemo}>
+                                    <Icon>
+                                        <FiEdit />
+                                    </Icon>
+                                    <p>編輯</p>
+                                </StyledMenuItem>
+                                <StyledMenuItem onClick={handleDeleteMemo}>
+                                    <Icon>
+                                        <FiTrash2 />
+                                    </Icon>
+                                    <p>刪除</p>
+                                </StyledMenuItem>
+                            </StyledMenu>
+                        )}
                     </IconButton>
-                    {showCardMenu && (
-                        <StyledMenu>
-                            <StyledMenuItem onClick={handleOpenEditMemo}>
-                                <Icon>
-                                    <FiEdit />
-                                </Icon>
-                                <p>編輯</p>
-                            </StyledMenuItem>
-                            <StyledMenuItem onClick={handleDeleteMemo}>
-                                <Icon>
-                                    <FiTrash2 />
-                                </Icon>
-                                <p>刪除</p>
-                            </StyledMenuItem>
-                        </StyledMenu>
-                    )}
                 </Flex>
                 <ImgContainer>
                     {img.length > 0 ? (
