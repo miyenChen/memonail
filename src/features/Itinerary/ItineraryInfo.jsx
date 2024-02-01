@@ -197,7 +197,7 @@ function ItineraryInfo() {
         <StyledContainer>
             <StyledHeader>
                 <Flex $justifyC="space-between">
-                    <PlanStatus onSetStatus={setStatus} />
+                    <PlanStatus onSetStatus={setStatus} mode={mode} />
                     {mode === 'view' && (
                         <Button onClick={() => setMode('edit')} $size="small">
                             編輯

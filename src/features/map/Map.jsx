@@ -100,8 +100,8 @@ function Map() {
                             url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
                         />
                         {positionList &&
-                            positionList.map((pos) => (
-                                <Marker position={pos.position} key={pos.id}>
+                            positionList.map((pos, index) => (
+                                <Marker position={pos.position} key={index}>
                                     <Popup>
                                         <span>{pos.name}</span>
                                     </Popup>

@@ -31,14 +31,16 @@ const statusMapping = {
     'Todo': '計畫中',
     'Finish': '已完成',
 };
-function PlanStatus({ onSetStatus }) {
+function PlanStatus({ onSetStatus, mode }) {
     const [curStatus, setCurStatus] = useState('Todo');
     const [showList, setShowList] = useState(false);
 
     function handleChangeStatus(value) {
-        onSetStatus(value);
-        setCurStatus(value);
-        setShowList(false);
+        if (mode === 'edit') {
+            onSetStatus(value);
+            setCurStatus(value);
+            setShowList(false);
+        }
     }
     return (
         <div>

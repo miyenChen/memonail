@@ -49,8 +49,11 @@ function DayContent({ activeDay, startDate, setSchedules, schedules, setMode, mo
     }, [startDate, activeDay]);
 
     function handleDeleteLoc(index) {
-        const updateLoc = timeline.filter((item, i) => i !== index);
-        setSchedules(updateLoc);
+        const activeIndex = schedules.findIndex((item) => item.day === activeDay);
+        const targetIndex = activeIndex + index;
+        const newSchedules = schedules.filter((item, index) => index !== targetIndex);
+
+        setSchedules(newSchedules);
     }
 
     function handleTimeClick(index) {
@@ -60,7 +63,11 @@ function DayContent({ activeDay, startDate, setSchedules, schedules, setMode, mo
             if (newTime) {
                 setSchedules((pre) => {
                     const data = [...pre];
-                    data[index] = { ...data[index], time: newTime };
+                    //找到目前觀看的天數位於整個 schedules 第幾個開始
+                    const activeIndex = data.findIndex((item) => item.day === activeDay);
+                    const targetIndex = activeIndex + index;
+
+                    data[targetIndex] = { ...data[targetIndex], time: newTime };
                     return data;
                 });
             }
