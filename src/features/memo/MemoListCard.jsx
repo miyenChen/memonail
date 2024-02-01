@@ -10,6 +10,7 @@ import Card from '../../ui/Card';
 import Icon from '../../ui/Icon';
 import { deleteMemo } from './memosSlice';
 import AddMemo from './AddMemo';
+import Markdown from 'react-markdown';
 
 const StyledMemoList = styled(Card)`
     display: flex;
@@ -28,8 +29,21 @@ const TextContainer = styled.div`
         font-size: 0.875rem;
         width: 700;
     }
-    & pre {
-        white-space: pre-wrap;
+`;
+const StyledMarkdown = styled.div`
+    padding: 0 0.5rem;
+
+    & h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin-bottom: 0.5rem;
+    }
+    & ul,
+    ol {
+        margin: 0.5rem 1rem;
     }
 `;
 const TagContainer = styled(TagList)`
@@ -130,7 +144,9 @@ function MemoListCard({ memo, img = [] }) {
                         <Tag key={index}>{tag}</Tag>
                     ))}
                 </TagContainer>
-                <pre>{content}</pre>
+                <StyledMarkdown>
+                    <Markdown>{content}</Markdown>
+                </StyledMarkdown>
                 {locationNames.length > 0 && (
                     <LocationContainer>
                         {locationNames.map((loction, index) => (

@@ -26,7 +26,6 @@ const tabMapping = {
     'todo': '計畫中',
     'finish': '已完成',
     'favorite': '我的收藏',
-    'shared': '與我共用',
 };
 
 function filterItinerary(itinerarys, filterBy) {
@@ -39,8 +38,6 @@ function filterItinerary(itinerarys, filterBy) {
             return itinerarys.filter((item) => item.status === 'Finish');
         case 'favorite':
             return itinerarys.filter((item) => item.favorite === true);
-        case 'shared':
-            return itinerarys.filter((item) => item.shared === true);
         default:
             return itinerarys;
     }
@@ -64,7 +61,6 @@ function Itinerary() {
             todo: filterItinerary(itinerarys, 'todo').length,
             finish: filterItinerary(itinerarys, 'finish').length,
             favorite: filterItinerary(itinerarys, 'favorite').length,
-            shared: filterItinerary(itinerarys, 'shared').length,
         });
     }, [itinerarys, tabActive]);
 
