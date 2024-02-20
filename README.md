@@ -1,7 +1,6 @@
 # Memonail
-
-Memonail是一個結合筆記、地標紀錄，可以自行規劃旅遊行程的網站，
-https://miyenchen.github.io/memonail/
+[網站 Demo](https://miyenchen.github.io/memonail/)
+Memonail是一個結合筆記、地標紀錄，可以自行規劃旅遊行程的網站，首頁點擊登入後，填寫任意信箱及高於六位數密碼，即可到達主要筆記、地點、規劃頁面。
 
 ## 安裝步驟
 1. 複製專案到本地：
@@ -21,7 +20,6 @@ npm install
 ```
 npm run dev
 ```
-## 
 
 ## 相關技術
 此專案使用了以下技術和套件：
