@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import GlobalStyles from './GlobalStyles';
 import Intro from './pages/Intro';
 import AuthLayout from './pages/AuthLayout';
@@ -19,7 +19,7 @@ function App() {
     return (
         <>
             <GlobalStyles />
-            <BrowserRouter>
+            <HashRouter>
                 <Routes>
                     <Route index element={<Intro />} />
                     <Route path="user" element={<AuthLayout />}>
@@ -43,7 +43,7 @@ function App() {
                         <Route path="itinerary/:id" element={<ItineraryInfo />} />
                     </Route>
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
         </>
     );
 }

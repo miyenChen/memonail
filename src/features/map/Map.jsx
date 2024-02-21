@@ -1,5 +1,8 @@
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import L from 'leaflet';
 import { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -63,6 +66,18 @@ function Map() {
     const mapFloatHeight = useSelector((state) => state.maps.mapFloatHeight);
     const positionList = useSelector((state) => state.maps.positionList);
 
+    //指定 icon 的圖片，避免打包時遺漏
+    const ICON = L.icon({
+        iconUrl: markerIcon,
+        iconRetinaUrl: markerIcon2x,
+        shadowUrl: markerShadow,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        tooltipAnchor: [16, -28],
+        shadowSize: [41, 41],
+    });
+
     //限制地圖邊界
     function MapBounds() {
         const map = useMap(); //配合 mapRef 抓取實例
@@ -101,7 +116,7 @@ function Map() {
                         />
                         {positionList &&
                             positionList.map((pos, index) => (
-                                <Marker position={pos.position} key={index}>
+                                <Marker position={pos.position} key={index} icon={ICON}>
                                     <Popup>
                                         <span>{pos.name}</span>
                                     </Popup>
@@ -109,7 +124,7 @@ function Map() {
                             ))}
                         {curPosition && (
                             <>
-                                <Marker position={curPosition} />
+                                <Marker position={curPosition} icon={ICON} />
                                 <ChangeCenter position={curPosition} />
                             </>
                         )}
