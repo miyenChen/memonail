@@ -5,7 +5,7 @@ function Terms() {
     const [content, setContent] = useState('');
 
     // markdown檔案位置
-    const md = '/terms.md';
+    const md = '/memonail/terms.md';
     useEffect(() => {
         fetch(md)
             .then((res) => res.text())
